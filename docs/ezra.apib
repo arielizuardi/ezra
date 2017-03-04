@@ -1,0 +1,110 @@
+FORMAT: 1a
+
+# Ezra
+
+Ezra is a project intended to manage JPCC Community Classes. The name Ezra inspired from Nehemiah Book.
+
+# Group Participant
+
+Manage Participant
+
+## Register [POST /participant]
+
+Register new Participant
+
++ Request Register Placement (application/json)
+    + Attributes (Participant)
+
++ Response 201 (application/json)
+    + Attributes (Participant)
+
++ Response 422 (application/json)
+  If the request body invalid or does not contain required fields
+    + Attributes (Error)
+
+
+## Fetch [GET /participant{?num, cursor, year, batch}]
+
+Fetch participants
+
++ Parameters
+    + cursor (string, optional) - Cursor for pagination.
+        + Default: 0
+    + num (number, optional) - Number of participant to be returned
+        + Default: 10
+    + year (number, optional) - Year
+    + batch (number, optional) - Batch
+
++ Response 200 (application/json)
+    + Attributes (array[Participant])
+
+
+## Participant [/participant/{participant_id}]
+
++ Parameters
+    + participant_id: `someparticipantid` (string) - Participant ID
+
+### GET [GET]
+
+Get Participant
+
++ Response 200 (application/json)
+
+  + Attributes (Participant)
+
++ Response 404 (application/json)
+
+  If there is no participant with specified ID
+
+  + Attributes (Error)
+
+ ### Update [PUT]
+
+ Update participant
+
++ Request (application/json)
+    + Attributes (Participant)
+
++ Response 200 (application/json)
+    + Attributes (Participant)
+
++ Response 404 (application/json)
+
+  If there is no participant with specified ID
+
+  + Attributes (Error)
+
++ Response 422 (application/json)
+
+  If the request body invalid or does not contain required fields
+
+  + Attributes (Error)
+
+### Unregister [DELETE]
+
+Unregister/remove participant
+
++ Response 204 (application/json)
+
++ Response 404 (application/json)
+
+  If there is no participant with specified ID
+
+  + Attributes (Error)
+
+
+# Data Structures
+
+## Participant
+
++ id: `someparticipantid` (string) - ID of participant
++ name: `John Doe` (string) - Participant's name
++ email: `jdoe@mail.com` (string) - Participant's email
++ phone_number: `+62819123123` (string) - Participant's phone nmber
++ dob: `30-12-1980` (string) - Participant date of birth
++ date: `Rasuna 1` (string) - Participant's DATE
+
+
+## Error (object)
+
++ message: This is an error (string)
