@@ -10,9 +10,9 @@ Manage Participant
 
 ## Register [POST /participant]
 
-Register new Participant
+Register new participant
 
-+ Request Register Placement (application/json)
++ Request Register Participant (application/json)
     + Attributes (Participant)
 
 + Response 201 (application/json)
@@ -93,6 +93,185 @@ Unregister/remove participant
   + Attributes (Error)
 
 
+# Group Presenter
+
+Manage Presenter
+
+## Register [POST /presenter]
+
+Register new presenter
+
++ Request register presenter (application/json)
+  + Attributes (Presenter)
+
++ Response 201 (application/json)
+  + Attributes (Presenter)
+
++ Response 422 (application/json)
+If the request body invalid or does not contain required fields
+  + Attributes (Error)
+
+
+## Fetch [GET /presenter{?num, cursor, year, batch}]
+
+Fetch Presenters
+
++ Parameters
+  + cursor (string, optional) - Cursor for pagination.
+      + Default: 0
+  + num (number, optional) - Number of Presenter to be returned
+      + Default: 10
+  + year (number, optional) - Year
+  + batch (number, optional) - Batch
+
++ Response 200 (application/json)
+  + Attributes (array[Presenter])
+
+
+## Presenter [/Presenter/{Presenter_id}]
+
++ Parameters
+  + Presenter_id: `somePresenterid` (string) - Presenter ID
+
+### GET [GET]
+
+Get Presenter
+
++ Response 200 (application/json)
+
++ Attributes (Presenter)
+
++ Response 404 (application/json)
+
+If there is no Presenter with specified ID
+
++ Attributes (Error)
+
+### Update [PUT]
+
+Update Presenter
+
++ Request (application/json)
+  + Attributes (Presenter)
+
++ Response 200 (application/json)
+  + Attributes (Presenter)
+
++ Response 404 (application/json)
+
+If there is no presenter with specified ID
+
++ Attributes (Error)
+
++ Response 422 (application/json)
+
+If the request body invalid or does not contain required fields
+
++ Attributes (Error)
+
+### Unregister [DELETE]
+
+Unregister/remove presenter
+
++ Response 204 (application/json)
+
++ Response 404 (application/json)
+
+If there is no presenter with specified ID
+
++ Attributes (Error)
+
+
+# Group Facilitator
+
+Manage Facilitator
+
+## Register [POST /facilitator]
+
+Register new facilitator
+
++ Request Register Placement (application/json)
+    + Attributes (Facilitator)
+
++ Response 201 (application/json)
+    + Attributes (Facilitator)
+
++ Response 422 (application/json)
+  If the request body invalid or does not contain required fields
+    + Attributes (Error)
+
+
+## Fetch [GET /facilitator{?num, cursor, year, batch}]
+
+Fetch Facilitators
+
++ Parameters
+    + cursor (string, optional) - Cursor for pagination.
+        + Default: 0
+    + num (number, optional) - Number of Facilitator to be returned
+        + Default: 10
+    + year (number, optional) - Year
+    + batch (number, optional) - Batch
+
++ Response 200 (application/json)
+    + Attributes (array[Facilitator])
+
+
+## Facilitator [/Facilitator/{Facilitator_id}]
+
++ Parameters
+    + Facilitator_id: `someFacilitatorid` (string) - Facilitator ID
+
+### GET [GET]
+
+Get Facilitator
+
++ Response 200 (application/json)
+
+  + Attributes (Facilitator)
+
++ Response 404 (application/json)
+
+  If there is no facilitator with specified ID
+
+  + Attributes (Error)
+
+ ### Update [PUT]
+
+ Update Facilitator
+
++ Request (application/json)
+    + Attributes (Facilitator)
+
++ Response 200 (application/json)
+    + Attributes (Facilitator)
+
++ Response 404 (application/json)
+
+  If there is no Facilitator with specified ID
+
+  + Attributes (Error)
+
++ Response 422 (application/json)
+
+  If the request body invalid or does not contain required fields
+
+  + Attributes (Error)
+
+### Unregister [DELETE]
+
+Unregister/remove Facilitator
+
++ Response 204 (application/json)
+
++ Response 404 (application/json)
+
+  If there is no Facilitator with specified ID
+
+  + Attributes (Error)
+
+
+
 # Data Structures
 
 ## Participant
@@ -103,6 +282,24 @@ Unregister/remove participant
 + phone_number: `+62819123123` (string) - Participant's phone nmber
 + dob: `30-12-1980` (string) - Participant date of birth
 + date: `Rasuna 1` (string) - Participant's DATE
+
+## Presenter
+
++ id: `somepresenterid` (string) - ID of Presenter
++ name: `John Doe` (string) - Presenter's name
++ email: `jdoe@mail.com` (string) - Presenter's email
++ phone_number: `+62819123123` (string) - Presenter's phone nmber
++ dob: `30-12-1980` (string) - Presenter date of birth
++ date: `Rasuna 1` (string) - Presenter's DATE
+
+## Facilitator
+
++ id: `somefacilitatorid` (string) - ID of Facilitator
++ name: `John Doe` (string) - Facilitator's name
++ email: `jdoe@mail.com` (string) - Facilitator's email
++ phone_number: `+62819123123` (string) - Facilitator's phone nmber
++ dob: `30-12-1980` (string) - Facilitator date of birth
++ date: `Rasuna 1` (string) - Facilitator's DATE
 
 
 ## Error (object)
