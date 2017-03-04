@@ -128,10 +128,10 @@ Fetch Presenters
   + Attributes (array[Presenter])
 
 
-## Presenter [/Presenter/{Presenter_id}]
+## Presenter [/presenter/{presenter_id}]
 
 + Parameters
-  + Presenter_id: `somePresenterid` (string) - Presenter ID
+  + presenter_id: `somepresenterid` (string) - Presenter ID
 
 ### GET [GET]
 
@@ -217,10 +217,10 @@ Fetch Facilitators
     + Attributes (array[Facilitator])
 
 
-## Facilitator [/Facilitator/{Facilitator_id}]
+## Facilitator [/facilitator/{facilitator_id}]
 
 + Parameters
-    + Facilitator_id: `someFacilitatorid` (string) - Facilitator ID
+    + facilitator_id: `somefacilitatorid` (string) - Facilitator ID
 
 ### GET [GET]
 
@@ -248,7 +248,7 @@ Get Facilitator
 
 + Response 404 (application/json)
 
-  If there is no Facilitator with specified ID
+  If there is no facilitator with specified ID
 
   + Attributes (Error)
 
@@ -271,6 +271,32 @@ Unregister/remove Facilitator
   + Attributes (Error)
 
 
+## Assign Facilitator to Class [/facilitator/{facilitator_id}/class/{class_id}]
+
++ Parameters
+  + facilitator_id: `somefacilitatorid` (string) - Facilitator ID
+  + class_id: `someclassid` (string) - Class ID
+
+## Assign [POST]
+
+Assign facilitator to class
+
++ Response 200
+
++ Response 404 (application/json)
+  If there is no facilitator/class with specified ID
+  + Attributes (Error)
+
+## Unassign [DELETE]
+
+Unassign facilitator from class
+
++ Response 200
+
++ Response 404 (application/json)
+  If there is no facilitator/class with specified ID
+  + Attributes (Error)
+
 
 # Data Structures
 
@@ -279,7 +305,7 @@ Unregister/remove Facilitator
 + id: `someparticipantid` (string) - ID of participant
 + name: `John Doe` (string) - Participant's name
 + email: `jdoe@mail.com` (string) - Participant's email
-+ phone_number: `+62819123123` (string) - Participant's phone nmber
++ phone_number: `+62819123123` (string) - Participant's phone number
 + dob: `30-12-1980` (string) - Participant date of birth
 + date: `Rasuna 1` (string) - Participant's DATE
 
@@ -288,7 +314,7 @@ Unregister/remove Facilitator
 + id: `somepresenterid` (string) - ID of Presenter
 + name: `John Doe` (string) - Presenter's name
 + email: `jdoe@mail.com` (string) - Presenter's email
-+ phone_number: `+62819123123` (string) - Presenter's phone nmber
++ phone_number: `+62819123123` (string) - Presenter's phone number
 + dob: `30-12-1980` (string) - Presenter date of birth
 + date: `Rasuna 1` (string) - Presenter's DATE
 
@@ -297,7 +323,7 @@ Unregister/remove Facilitator
 + id: `somefacilitatorid` (string) - ID of Facilitator
 + name: `John Doe` (string) - Facilitator's name
 + email: `jdoe@mail.com` (string) - Facilitator's email
-+ phone_number: `+62819123123` (string) - Facilitator's phone nmber
++ phone_number: `+62819123123` (string) - Facilitator's phone number
 + dob: `30-12-1980` (string) - Facilitator date of birth
 + date: `Rasuna 1` (string) - Facilitator's DATE
 
