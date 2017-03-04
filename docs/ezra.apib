@@ -1,0 +1,461 @@
+FORMAT: 1a
+
+# Ezra
+
+Ezra is a project intended to manage JPCC Community Classes. The name Ezra inspired from Nehemiah Book.
+
+# Group Participant
+
+Manage Participant
+
+## Register [POST /participant]
+
+Register new participant
+
++ Request Register Participant (application/json)
+    + Attributes (Participant)
+
++ Response 201 (application/json)
+    + Attributes (Participant)
+
++ Response 422 (application/json)
+  If the request body invalid or does not contain required fields
+    + Attributes (Error)
+
+
+## Fetch [GET /participant{?num, cursor, year, batch}]
+
+Fetch participants
+
++ Parameters
+    + cursor (string, optional) - Cursor for pagination.
+        + Default: 0
+    + num (number, optional) - Number of participant to be returned
+        + Default: 10
+    + year (number, optional) - Year
+    + batch (number, optional) - Batch
+
++ Response 200 (application/json)
+    + Attributes (array[Participant])
+
+
+## Participant [/participant/{participant_id}]
+
++ Parameters
+    + participant_id: `someparticipantid` (string) - Participant ID
+
+### GET [GET]
+
+Get Participant
+
++ Response 200 (application/json)
+
+  + Attributes (Participant)
+
++ Response 404 (application/json)
+
+  If there is no participant with specified ID
+
+  + Attributes (Error)
+
+ ### Update [PUT]
+
+ Update participant
+
++ Request (application/json)
+    + Attributes (Participant)
+
++ Response 200 (application/json)
+    + Attributes (Participant)
+
++ Response 404 (application/json)
+
+  If there is no participant with specified ID
+
+  + Attributes (Error)
+
++ Response 422 (application/json)
+
+  If the request body invalid or does not contain required fields
+
+  + Attributes (Error)
+
+### Unregister [DELETE]
+
+Unregister/remove participant
+
++ Response 204 (application/json)
+
++ Response 404 (application/json)
+
+  If there is no participant with specified ID
+
+  + Attributes (Error)
+
+
+# Group Presenter
+
+Manage Presenter
+
+## Register [POST /presenter]
+
+Register new presenter
+
++ Request register presenter (application/json)
+  + Attributes (Presenter)
+
++ Response 201 (application/json)
+  + Attributes (Presenter)
+
++ Response 422 (application/json)
+If the request body invalid or does not contain required fields
+  + Attributes (Error)
+
+
+## Fetch [GET /presenter{?num, cursor, year, batch}]
+
+Fetch Presenters
+
++ Parameters
+  + cursor (string, optional) - Cursor for pagination.
+      + Default: 0
+  + num (number, optional) - Number of Presenter to be returned
+      + Default: 10
+  + year (number, optional) - Year
+  + batch (number, optional) - Batch
+
++ Response 200 (application/json)
+  + Attributes (array[Presenter])
+
+
+## Presenter [/presenter/{presenter_id}]
+
++ Parameters
+  + presenter_id: `somepresenterid` (string) - Presenter ID
+
+### GET [GET]
+
+Get Presenter
+
++ Response 200 (application/json)
+
++ Attributes (Presenter)
+
++ Response 404 (application/json)
+
+If there is no Presenter with specified ID
+
++ Attributes (Error)
+
+### Update [PUT]
+
+Update Presenter
+
++ Request (application/json)
+  + Attributes (Presenter)
+
++ Response 200 (application/json)
+  + Attributes (Presenter)
+
++ Response 404 (application/json)
+
+If there is no presenter with specified ID
+
++ Attributes (Error)
+
++ Response 422 (application/json)
+
+If the request body invalid or does not contain required fields
+
++ Attributes (Error)
+
+### Unregister [DELETE]
+
+Unregister/remove presenter
+
++ Response 204 (application/json)
+
++ Response 404 (application/json)
+
+If there is no presenter with specified ID
+
++ Attributes (Error)
+
+
+# Group Facilitator
+
+Manage Facilitator
+
+## Register [POST /facilitator]
+
+Register new facilitator
+
++ Request Register Placement (application/json)
+    + Attributes (Facilitator)
+
++ Response 201 (application/json)
+    + Attributes (Facilitator)
+
++ Response 422 (application/json)
+  If the request body invalid or does not contain required fields
+    + Attributes (Error)
+
+
+## Fetch [GET /facilitator{?num, cursor, year, batch}]
+
+Fetch Facilitators
+
++ Parameters
+    + cursor (string, optional) - Cursor for pagination.
+        + Default: 0
+    + num (number, optional) - Number of Facilitator to be returned
+        + Default: 10
+    + year (number, optional) - Year
+    + batch (number, optional) - Batch
+
++ Response 200 (application/json)
+    + Attributes (array[Facilitator])
+
+
+## Facilitator [/facilitator/{facilitator_id}]
+
++ Parameters
+    + facilitator_id: `somefacilitatorid` (string) - Facilitator ID
+
+### GET [GET]
+
+Get Facilitator
+
++ Response 200 (application/json)
+
+  + Attributes (Facilitator)
+
++ Response 404 (application/json)
+
+  If there is no facilitator with specified ID
+
+  + Attributes (Error)
+
+ ### Update [PUT]
+
+ Update Facilitator
+
++ Request (application/json)
+    + Attributes (Facilitator)
+
++ Response 200 (application/json)
+    + Attributes (Facilitator)
+
++ Response 404 (application/json)
+
+  If there is no facilitator with specified ID
+
+  + Attributes (Error)
+
++ Response 422 (application/json)
+
+  If the request body invalid or does not contain required fields
+
+  + Attributes (Error)
+
+### Unregister [DELETE]
+
+Unregister/remove Facilitator
+
++ Response 204 (application/json)
+
++ Response 404 (application/json)
+
+  If there is no Facilitator with specified ID
+
+  + Attributes (Error)
+
+
+## Assign Facilitator to Class [/facilitator/{facilitator_id}/class/{class_id}]
+
++ Parameters
+  + facilitator_id: `somefacilitatorid` (string) - Facilitator ID
+  + class_id: `someclassid` (string) - Class ID
+
+## Assign [POST]
+
+Assign facilitator to class
+
++ Response 200
+
++ Response 404 (application/json)
+  If there is no facilitator/class with specified ID
+  + Attributes (Error)
+
+## Unassign [DELETE]
+
+Unassign facilitator from class
+
++ Response 200
+
++ Response 404 (application/json)
+  If there is no facilitator/class with specified ID
+  + Attributes (Error)
+
+# Group Class
+
+Manage class
+
+## Register [POST /class]
+
+Add new class
+
++ Request add class (application/json)
+  + Attributes (Class)
+
++ Response 201 (application/json)
+  + Attributes (Class)
+
++ Response 422 (application/json)
+If the request body invalid or does not contain required fields
+  + Attributes (Error)
+
+
+## Fetch [GET /class{?num, cursor, year, batch}]
+
+Fetch classs
+
++ Parameters
+  + cursor (string, optional) - Cursor for pagination.
+      + Default: 0
+  + num (number, optional) - Number of class to be returned
+      + Default: 10
+  + year (number, optional) - Year
+  + batch (number, optional) - Batch
+
++ Response 200 (application/json)
+  + Attributes (array[Class])
+
+
+## Class [/class/{class_id}]
+
++ Parameters
+  + class_id: `someclassid` (string) - class ID
+
+### GET [GET]
+
+Get class
+
++ Response 200 (application/json)
+
++ Attributes (Class)
+
++ Response 404 (application/json)
+
+If there is no class with specified ID
+
++ Attributes (Error)
+
+### Update [PUT]
+
+Update class
+
++ Request (application/json)
+  + Attributes (Class)
+
++ Response 200 (application/json)
+  + Attributes (Class)
+
++ Response 404 (application/json)
+
+If there is no class with specified ID
+
++ Attributes (Error)
+
++ Response 422 (application/json)
+
+If the request body invalid or does not contain required fields
+
++ Attributes (Error)
+
+### Remove [DELETE]
+
+Remove class
+
++ Response 204 (application/json)
+
++ Response 404 (application/json)
+
+If there is no class with specified ID
+
++ Attributes (Error)
+
+
+# Data Structures
+
+## Participant
+
++ id: 12345 (number) - ID of participant
++ name: `John Doe` (string) - Participant's name
++ email: `jdoe@mail.com` (string) - Participant's email
++ phone_number: `+62819123123` (string) - Participant's phone number
++ dob: `30-12-1980` (string) - Participant date of birth
++ date: `Rasuna 1` (string) - Participant's DATE
+
+## Presenter
+
++ id: 12345 (number) - ID of Presenter
++ name: `John Doe` (string) - Presenter's name
++ email: `jdoe@mail.com` (string) - Presenter's email
++ phone_number: `+62819123123` (string) - Presenter's phone number
++ dob: `30-12-1980` (string) - Presenter date of birth
++ date: `Rasuna 1` (string) - Presenter's DATE
+
+## Facilitator
+
++ id: 12345 (number) - ID of Facilitator
++ name: `John Doe` (string) - Facilitator's name
++ email: `jdoe@mail.com` (string) - Facilitator's email
++ phone_number: `+62819123123` (string) - Facilitator's phone number
++ dob: `30-12-1980` (string) - Facilitator date of birth
++ date: `Rasuna 1` (string) - Facilitator's DATE
+
+## Class
+
++ id: `jpcc-col-1-2017` (string) - ID of class
++ type: `jpcc-col` (string) - Type of class, e.g jpcc-cob, jpcc-col
++ batch: 1 (number) - Class Batch
++ year: 2017 (number) - Class Year
++ description: `here is class description` (string) - description of class
+
+
+## Form
++ id: 12345 (number)
++ name: `Feedback Form PRESENTER CoL Sesi 8 - SMAART Planning (Responses)` (string)
++ external_url: `https://docs.google.com/spreadsheets/d/1pNHG0uPsMyaLjinREP4UYXXeVrUw0-3UCHZ7uxltIEQ/edit#gid=1523709804`
+
+
+## FormQuestion
++ form_id: 1 (number)
++ question_id: 123 (number)
+
+
+## Question
+
++ id: 123 (number) - ID of feedback question
++ name: `Penguasaan Materi` (string) - Name will be shown in field
++ description: `Penjelasan mengenai penguasaan materi` (string) - Description
++ answer_type : `number` (string) - Answer Type e.g (number, string)
+
+## Answer
+
++ id: 2 (number) - ID of feedback answer
++ recipient_type: `presenter` (string) - Type of recipient e.g (presenter, facilitator)
++ recipient_id: 12345 (number) - Type of recipient
++ reviewer_type: `participant` (string) - Type of reviewer
++ reviewer_id : 12345 (number) - ID of reviewer
++ class_id: `jpcc-col-1-2017` (string) - ID of class
++ session: 1 (number) - Session number
++ question_id: 123
++ answer: `Great!` (string)  - Answer for feedback, could be in the form of number/ string e.g 4 or `Awesome!`
++ created_at: `2017-01-01 00:00:00` (string) - Answer created at time
+
+
+## Error (object)
+
++ message: This is an error (string)
