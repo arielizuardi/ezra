@@ -297,6 +297,94 @@ Unassign facilitator from class
   If there is no facilitator/class with specified ID
   + Attributes (Error)
 
+# Group Class
+
+Manage class
+
+## Register [POST /class]
+
+Add new class
+
++ Request add class (application/json)
+  + Attributes (Class)
+
++ Response 201 (application/json)
+  + Attributes (Class)
+
++ Response 422 (application/json)
+If the request body invalid or does not contain required fields
+  + Attributes (Error)
+
+
+## Fetch [GET /class{?num, cursor, year, batch}]
+
+Fetch classs
+
++ Parameters
+  + cursor (string, optional) - Cursor for pagination.
+      + Default: 0
+  + num (number, optional) - Number of class to be returned
+      + Default: 10
+  + year (number, optional) - Year
+  + batch (number, optional) - Batch
+
++ Response 200 (application/json)
+  + Attributes (array[Class])
+
+
+## Class [/class/{class_id}]
+
++ Parameters
+  + class_id: `someclassid` (string) - class ID
+
+### GET [GET]
+
+Get class
+
++ Response 200 (application/json)
+
++ Attributes (Class)
+
++ Response 404 (application/json)
+
+If there is no class with specified ID
+
++ Attributes (Error)
+
+### Update [PUT]
+
+Update class
+
++ Request (application/json)
+  + Attributes (Class)
+
++ Response 200 (application/json)
+  + Attributes (Class)
+
++ Response 404 (application/json)
+
+If there is no class with specified ID
+
++ Attributes (Error)
+
++ Response 422 (application/json)
+
+If the request body invalid or does not contain required fields
+
++ Attributes (Error)
+
+### Remove [DELETE]
+
+Remove class
+
++ Response 204 (application/json)
+
++ Response 404 (application/json)
+
+If there is no class with specified ID
+
++ Attributes (Error)
+
 
 # Data Structures
 
@@ -326,6 +414,14 @@ Unassign facilitator from class
 + phone_number: `+62819123123` (string) - Facilitator's phone number
 + dob: `30-12-1980` (string) - Facilitator date of birth
 + date: `Rasuna 1` (string) - Facilitator's DATE
+
+## Class
+
++ id: `jpcc-col-1-2017` (string) - ID of class
++ type: `jpcc-col` (string) - Type of class, e.g jpcc-cob, jpcc-col
++ batch: 1 (number) - Class Batch
++ year: 2017 (number) - Class Year
++ description: `here is class description` (string) - description of class
 
 
 ## Error (object)
