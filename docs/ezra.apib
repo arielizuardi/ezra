@@ -390,7 +390,7 @@ If there is no class with specified ID
 
 ## Participant
 
-+ id: `someparticipantid` (string) - ID of participant
++ id: 12345 (number) - ID of participant
 + name: `John Doe` (string) - Participant's name
 + email: `jdoe@mail.com` (string) - Participant's email
 + phone_number: `+62819123123` (string) - Participant's phone number
@@ -399,7 +399,7 @@ If there is no class with specified ID
 
 ## Presenter
 
-+ id: `somepresenterid` (string) - ID of Presenter
++ id: 12345 (number) - ID of Presenter
 + name: `John Doe` (string) - Presenter's name
 + email: `jdoe@mail.com` (string) - Presenter's email
 + phone_number: `+62819123123` (string) - Presenter's phone number
@@ -408,7 +408,7 @@ If there is no class with specified ID
 
 ## Facilitator
 
-+ id: `somefacilitatorid` (string) - ID of Facilitator
++ id: 12345 (number) - ID of Facilitator
 + name: `John Doe` (string) - Facilitator's name
 + email: `jdoe@mail.com` (string) - Facilitator's email
 + phone_number: `+62819123123` (string) - Facilitator's phone number
@@ -422,6 +422,38 @@ If there is no class with specified ID
 + batch: 1 (number) - Class Batch
 + year: 2017 (number) - Class Year
 + description: `here is class description` (string) - description of class
+
+
+## Form
++ id: 12345 (number)
++ name: `Feedback Form PRESENTER CoL Sesi 8 - SMAART Planning (Responses)` (string)
++ external_url: `https://docs.google.com/spreadsheets/d/1pNHG0uPsMyaLjinREP4UYXXeVrUw0-3UCHZ7uxltIEQ/edit#gid=1523709804`
+
+
+## FormQuestion
++ form_id: 1 (number)
++ question_id: 123 (number)
+
+
+## Question
+
++ id: 123 (number) - ID of feedback question
++ name: `Penguasaan Materi` (string) - Name will be shown in field
++ description: `Penjelasan mengenai penguasaan materi` (string) - Description
++ answer_type : `number` (string) - Answer Type e.g (number, string)
+
+## Answer
+
++ id: 2 (number) - ID of feedback answer
++ recipient_type: `presenter` (string) - Type of recipient e.g (presenter, facilitator)
++ recipient_id: 12345 (number) - Type of recipient
++ reviewer_type: `participant` (string) - Type of reviewer
++ reviewer_id : 12345 (number) - ID of reviewer
++ class_id: `jpcc-col-1-2017` (string) - ID of class
++ session: 1 (number) - Session number
++ question_id: 123
++ answer: `Great!` (string)  - Answer for feedback, could be in the form of number/ string e.g 4 or `Awesome!`
++ created_at: `2017-01-01 00:00:00` (string) - Answer created at time
 
 
 ## Error (object)
