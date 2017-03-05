@@ -39,6 +39,27 @@ func TestGeneratePresenterReport(t *testing.T) {
 	fr.AssertCalled(t, `FetchPresenterFeedbacks`, presenterID, session, batch, year)
 }
 
+func TestGeneratePresenterReportNonExistsPresenter(t *testing.T) {
+	presenterID := int64(1)
+	session := int64(1)
+	batch := int64(1)
+	year := int64(2017)
+
+	pr := new(mocksPresenterRepository.Repository)
+	pr.On(`Get`, presenterID).Return(nil, nil)
+
+	fr := new(mocksFeedbackRepository.Repository)
+	fcr := new(mocksFacilitatorRepository.Repository)
+	u := usecase.NewReportUsecase(pr, fcr, fr)
+
+	report, err := u.GeneratePresenterReport(presenterID, session, batch, year)
+	assert.EqualError(t, presenter.ErrPresenterNotFound, err.Error())
+	assert.Nil(t, report)
+
+	pr.AssertCalled(t, `Get`, presenterID)
+	fr.AssertNotCalled(t, `FetchPresenterFeedbacks`, presenterID, session, batch, year)
+}
+
 func TestGenerateFacilitatorReport(t *testing.T) {
 	facilitatorID := int64(1)
 	batch := int64(1)
@@ -62,4 +83,25 @@ func TestGenerateFacilitatorReport(t *testing.T) {
 
 	fcr.AssertCalled(t, `Get`, facilitatorID)
 	fbr.AssertCalled(t, `FetchFacilitatorFeedbacks`, facilitatorID, batch, year)
+}
+
+func TestGenerateFacilitatorReportNonExistsFacilitator(t *testing.T) {
+	facilitatorID := int64(1)
+	batch := int64(1)
+	year := int64(2017)
+
+	fcr := new(mocksFacilitatorRepository.Repository)
+	fcr.On(`Get`, facilitatorID).Return(nil, nil)
+
+	fbr := new(mocksFeedbackRepository.Repository)
+	pr := new(mocksPresenterRepository.Repository)
+
+	u := usecase.NewReportUsecase(pr, fcr, fbr)
+
+	report, err := u.GenerateFacilitatorReport(facilitatorID, batch, year)
+	assert.EqualError(t, facilitator.ErrFacilitatorNotFound, err.Error())
+	assert.Nil(t, report)
+
+	fcr.AssertCalled(t, `Get`, facilitatorID)
+	fbr.AssertNotCalled(t, `FetchFacilitatorFeedbacks`, facilitatorID, batch, year)
 }
