@@ -56,6 +56,7 @@ func TestGeneratePresenterReport(t *testing.T) {
 	assert.Equal(t, report.AvgFields[feedback.PresenterRatingKey[0]], float64(10)/float64(3))
 	assert.Equal(t, report.AvgFields[feedback.PresenterRatingKey[1]], float64(8)/float64(3))
 	assert.Equal(t, report.AvgFields[feedback.PresenterRatingKey[2]], float64(8)/float64(3))
+	assert.Equal(t, report.OverallAvg, 2.888888888888889)
 
 	pr.AssertCalled(t, `Get`, presenterID)
 	fr.AssertCalled(t, `FetchPresenterFeedbacks`, presenterID, session, batch, year)
@@ -172,6 +173,8 @@ func TestGenerateFacilitatorReport(t *testing.T) {
 	assert.Equal(t, report.AvgFields[feedback.FacilitatorRatingKey[0]], float64(10)/float64(3))
 	assert.Equal(t, report.AvgFields[feedback.FacilitatorRatingKey[1]], float64(8)/float64(3))
 	assert.Equal(t, report.AvgFields[feedback.FacilitatorRatingKey[2]], float64(8)/float64(3))
+	assert.Equal(t, report.OverallAvg, 2.888888888888889)
+
 }
 
 func TestGenerateFacilitatorReportNonExistsFacilitator(t *testing.T) {

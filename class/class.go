@@ -9,9 +9,15 @@ const (
 	COC = `COC`
 )
 
-// Class represents class name
+// Class represents class
 type Class struct {
 	Name  string
 	Batch int64
 	Year  int64
+}
+
+// Session represents session
+type Session struct {
+	ID   int64
+	Name string
 }
