@@ -131,7 +131,7 @@ Fetch Presenters
 ## Presenter [/presenter/{presenter_id}]
 
 + Parameters
-  + presenter_id: `somepresenterid` (string) - Presenter ID
+  + presenter_id: 12345 (number) - Presenter ID
 
 ### GET [GET]
 
@@ -182,6 +182,21 @@ If there is no presenter with specified ID
 + Attributes (Error)
 
 
+## Presenter Report [/presenter/{presenter_id}/report]
+
++ Parameters
+  + presenter_id: 12345 (number) - Presenter ID
+
+## Get Report [GET]
+
++ Response 200 (application/json)
+   + Attributes (PresenterReport)
+
++ Response 404 (application/json)
+  If there is no presenter with specified ID
+  + Attributes (Error)
+
+
 # Group Facilitator
 
 Manage Facilitator
@@ -220,7 +235,7 @@ Fetch Facilitators
 ## Facilitator [/facilitator/{facilitator_id}]
 
 + Parameters
-    + facilitator_id: `somefacilitatorid` (string) - Facilitator ID
+    + facilitator_id: 12345 (number) - Facilitator ID
 
 ### GET [GET]
 
@@ -270,11 +285,25 @@ Unregister/remove Facilitator
 
   + Attributes (Error)
 
+## Facilitator Report [/facilitator/{facilitator_id}/report]
+
++ Parameters
+  + facilitator_id: 12345 (number) - Facilitator ID
+
+## Get Report [GET]
+
++ Response 200 (application/json)
+  + Attributes (FacilitatorReport)
+
++ Response 404 (application/json)
+  If there is no facilitator with specified ID
+  + Attributes (Error)
+
 
 ## Assign Facilitator to Class [/facilitator/{facilitator_id}/class/{class_id}]
 
 + Parameters
-  + facilitator_id: `somefacilitatorid` (string) - Facilitator ID
+  + facilitator_id: 12345 (number) - Facilitator ID
   + class_id: `someclassid` (string) - Class ID
 
 ## Assign [POST]
@@ -423,37 +452,30 @@ If there is no class with specified ID
 + year: 2017 (number) - Class Year
 + description: `here is class description` (string) - description of class
 
+## Session
++ id: 5 (number) - Session ID
++ name: `Finding Your Strength` (string) - Session Name
 
-## Form
-+ id: 12345 (number)
-+ name: `Feedback Form PRESENTER CoL Sesi 8 - SMAART Planning (Responses)` (string)
-+ external_url: `https://docs.google.com/spreadsheets/d/1pNHG0uPsMyaLjinREP4UYXXeVrUw0-3UCHZ7uxltIEQ/edit#gid=1523709804`
+## Average
++ key: `Penguasaan materi`
++ score: 5.0 (number)
 
+## Summary
++ positive_comment: `Great!` (string) - Summary of positive comment
++ improvement_comment: `Keep Improving!` (string) - Summary of improvement comment
 
-## FormQuestion
-+ form_id: 1 (number)
-+ question_id: 123 (number)
+## PresenterReport
++ class (Class)
++ session (Session)
++ presenter (Presenter)
++ average (array[Average])
++ summary (Summary)
 
-
-## Question
-
-+ id: 123 (number) - ID of feedback question
-+ name: `Penguasaan Materi` (string) - Name will be shown in field
-+ description: `Penjelasan mengenai penguasaan materi` (string) - Description
-+ answer_type : `number` (string) - Answer Type e.g (number, string)
-
-## Answer
-
-+ id: 2 (number) - ID of feedback answer
-+ recipient_type: `presenter` (string) - Type of recipient e.g (presenter, facilitator)
-+ recipient_id: 12345 (number) - Type of recipient
-+ reviewer_type: `participant` (string) - Type of reviewer
-+ reviewer_id : 12345 (number) - ID of reviewer
-+ class_id: `jpcc-col-1-2017` (string) - ID of class
-+ session: 1 (number) - Session number
-+ question_id: 123
-+ answer: `Great!` (string)  - Answer for feedback, could be in the form of number/ string e.g 4 or `Awesome!`
-+ created_at: `2017-01-01 00:00:00` (string) - Answer created at time
+## FacilitatorReport
++ class (Class)
++ facilitator (Facilitator)
++ average (array[Average])
++ comment: `Great job!` (string)
 
 
 ## Error (object)
