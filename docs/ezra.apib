@@ -182,10 +182,13 @@ If there is no presenter with specified ID
 + Attributes (Error)
 
 
-## Presenter Report [/presenter/{presenter_id}/report]
+## Presenter Report [/presenter/{presenter_id}/report{?session, batch, year}]
 
 + Parameters
   + presenter_id: 12345 (number) - Presenter ID
+  + session: 1 (numbe, optional) - Session number
+  + batch (number, optional) - Batch
+  + year (number, optional) - Year
 
 ## Get Report [GET]
 
@@ -285,10 +288,12 @@ Unregister/remove Facilitator
 
   + Attributes (Error)
 
-## Facilitator Report [/facilitator/{facilitator_id}/report]
+## Facilitator Report [/facilitator/{facilitator_id}/report{?batch, year}]
 
 + Parameters
   + facilitator_id: 12345 (number) - Facilitator ID
+  + batch (number, optional) - Batch
+  + year (number, optional) - Year
 
 ## Get Report [GET]
 
