@@ -120,3 +120,16 @@ func (r *reportUsecase) GeneratePresenterReport(presenterID int64, session int64
 
 	return presenterReport, nil
 }
+
+// NewReportUsecase returns new instance of ReportUsecase
+func NewReportUsecase(
+	presenterRepository presenterRepository.Repository,
+	facilitatorRepository facilRepository.Repository,
+	feedbackRepository repository.Repository) ReportUsecase {
+
+	return &reportUsecase{
+		PresenterRepository:   presenterRepository,
+		FacilitatorRepository: facilitatorRepository,
+		FeedbackRepository:    feedbackRepository,
+	}
+}
