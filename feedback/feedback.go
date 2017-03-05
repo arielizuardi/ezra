@@ -36,6 +36,11 @@ type Rating struct {
 	Score       int64
 }
 
+// NewRating returns new instance of rating
+func NewRating(key string, description string, score int64) *Rating {
+	return &Rating{key, description, score}
+}
+
 // PresenterFeedback represents presenter feedback
 type PresenterFeedback struct {
 	Class              *class.Class

@@ -64,7 +64,10 @@ func (r *reportUsecase) GenerateFacilitatorReport(facilitatorID int64, batch int
 	}
 
 	for _, Key := range feedback.FacilitatorRatingKey {
-		avg[Key] = float64(sum[Key]) / float64(ct[Key])
+		_, ok3 := sum[Key]
+		if ok3 {
+			avg[Key] = float64(sum[Key]) / float64(ct[Key])
+		}
 	}
 
 	facilitatorReport.AvgFields = avg
@@ -113,7 +116,10 @@ func (r *reportUsecase) GeneratePresenterReport(presenterID int64, session int64
 	}
 
 	for _, Key := range feedback.PresenterRatingKey {
-		avg[Key] = float64(sum[Key]) / float64(ct[Key])
+		_, ok3 := sum[Key]
+		if ok3 {
+			avg[Key] = float64(sum[Key]) / float64(ct[Key])
+		}
 	}
 
 	presenterReport.AvgFields = avg
