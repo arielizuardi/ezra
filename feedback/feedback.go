@@ -64,3 +64,25 @@ type FacilitatorFeedback struct {
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 }
+
+type BatchFeedbackFacilitator struct {
+	Class         *class.Class
+	Facilitator   *facilitator.Facilitator
+	BagOfFeedback []*Feedback
+}
+
+type SessionFeedbackPresenter struct {
+	Class         *class.Class
+	Session       int64
+	Presenter     *presenter.Presenter
+	BagOfFeedback []*Feedback
+}
+
+type Feedback struct {
+	Participant        *participant.Participant
+	Ratings            []*Rating
+	PositiveComment    string
+	ImprovementComment string
+	CreatedAt          time.Time
+	UpdatedAt          time.Time
+}

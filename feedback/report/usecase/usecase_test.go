@@ -136,28 +136,33 @@ func TestGenerateFacilitatorReport(t *testing.T) {
 	fcr := new(mocksFacilitatorRepository.Repository)
 	fcr.On(`Get`, facilitatorID).Return(f, nil)
 
+	fbc := new(feedback.Feedback)
 	r1 := feedback.NewRating(feedback.FacilitatorRatingKey[0], ``, 5)
 	r2 := feedback.NewRating(feedback.FacilitatorRatingKey[1], ``, 4)
 	r3 := feedback.NewRating(feedback.FacilitatorRatingKey[2], ``, 3)
-	pf1 := new(feedback.FacilitatorFeedback)
-	pf1.Ratings = []*feedback.Rating{r1, r2, r3}
+	fbc.Ratings = []*feedback.Rating{r1, r2, r3}
 
+	fbc2 := new(feedback.Feedback)
 	r4 := feedback.NewRating(feedback.FacilitatorRatingKey[0], ``, 3)
 	r5 := feedback.NewRating(feedback.FacilitatorRatingKey[1], ``, 3)
 	r6 := feedback.NewRating(feedback.FacilitatorRatingKey[2], ``, 3)
-	pf2 := new(feedback.FacilitatorFeedback)
-	pf2.Ratings = []*feedback.Rating{r4, r5, r6}
 
+	fbc2.Ratings = []*feedback.Rating{r4, r5, r6}
+
+	fbc3 := new(feedback.Feedback)
 	r7 := feedback.NewRating(feedback.FacilitatorRatingKey[0], ``, 2)
 	r8 := feedback.NewRating(feedback.FacilitatorRatingKey[1], ``, 1)
 	r9 := feedback.NewRating(feedback.FacilitatorRatingKey[2], ``, 2)
-	pf3 := new(feedback.FacilitatorFeedback)
-	pf3.Ratings = []*feedback.Rating{r7, r8, r9}
 
-	feedbacks := []*feedback.FacilitatorFeedback{pf1, pf2, pf3}
+	fbc3.Ratings = []*feedback.Rating{r7, r8, r9}
+
+	feedbacks := []*feedback.Feedback{fbc, fbc2, fbc3}
+
+	bff := new(feedback.BatchFeedbackFacilitator)
+	bff.BagOfFeedback = feedbacks
 
 	fbr := new(mocksFeedbackRepository.Repository)
-	fbr.On(`FetchFacilitatorFeedbacks`, facilitatorID, batch, year).Return(feedbacks, nil)
+	fbr.On(`GetBatchFeedbackFacilitator`, facilitatorID, batch, year).Return(bff, nil)
 
 	pr := new(mocksPresenterRepository.Repository)
 
@@ -168,7 +173,7 @@ func TestGenerateFacilitatorReport(t *testing.T) {
 	assert.NotNil(t, report)
 
 	fcr.AssertCalled(t, `Get`, facilitatorID)
-	fbr.AssertCalled(t, `FetchFacilitatorFeedbacks`, facilitatorID, batch, year)
+	fbr.AssertCalled(t, `GetBatchFeedbackFacilitator`, facilitatorID, batch, year)
 
 	assert.Equal(t, report.AvgFields[feedback.FacilitatorRatingKey[0]], float64(10)/float64(3))
 	assert.Equal(t, report.AvgFields[feedback.FacilitatorRatingKey[1]], float64(8)/float64(3))
@@ -195,7 +200,7 @@ func TestGenerateFacilitatorReportNonExistsFacilitator(t *testing.T) {
 	assert.Nil(t, report)
 
 	fcr.AssertCalled(t, `Get`, facilitatorID)
-	fbr.AssertNotCalled(t, `FetchFacilitatorFeedbacks`, facilitatorID, batch, year)
+	fbr.AssertNotCalled(t, `GetBatchFeedbackFacilitator`, facilitatorID, batch, year)
 }
 
 func TestGenerateFacilitatorReportAndGetErrorFromFacilitatorRepository(t *testing.T) {
@@ -216,7 +221,7 @@ func TestGenerateFacilitatorReportAndGetErrorFromFacilitatorRepository(t *testin
 	assert.Nil(t, report)
 
 	fcr.AssertCalled(t, `Get`, facilitatorID)
-	fbr.AssertNotCalled(t, `FetchFacilitatorFeedbacks`, facilitatorID, batch, year)
+	fbr.AssertNotCalled(t, `GetBatchFeedbackFacilitator`, facilitatorID, batch, year)
 }
 
 func TestGenerateFacilitatorReportAndGetErrorFromFeedbackRepository(t *testing.T) {
@@ -228,7 +233,7 @@ func TestGenerateFacilitatorReportAndGetErrorFromFeedbackRepository(t *testing.T
 	fcr.On(`Get`, facilitatorID).Return(new(facilitator.Facilitator), nil)
 
 	fbr := new(mocksFeedbackRepository.Repository)
-	fbr.On(`FetchFacilitatorFeedbacks`, facilitatorID, batch, year).Return(nil, errors.New(`Whoops!`))
+	fbr.On(`GetBatchFeedbackFacilitator`, facilitatorID, batch, year).Return(nil, errors.New(`Whoops!`))
 
 	pr := new(mocksPresenterRepository.Repository)
 
@@ -239,5 +244,5 @@ func TestGenerateFacilitatorReportAndGetErrorFromFeedbackRepository(t *testing.T
 	assert.Nil(t, report)
 
 	fcr.AssertCalled(t, `Get`, facilitatorID)
-	fbr.AssertCalled(t, `FetchFacilitatorFeedbacks`, facilitatorID, batch, year)
+	fbr.AssertCalled(t, `GetBatchFeedbackFacilitator`, facilitatorID, batch, year)
 }
