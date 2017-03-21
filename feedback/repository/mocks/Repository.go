@@ -55,25 +55,16 @@ func (_m *Repository) FetchPresenterFeedbacks(presenterID int64, session int64, 
 	return r0, r1
 }
 
-// GetBatchFeedbackFacilitator provides a mock function with given fields: facilitatorID, batch, year
-func (_m *Repository) GetBatchFeedbackFacilitator(facilitatorID int64, batch int64, year int64) (*feedback.BatchFeedbackFacilitator, error) {
-	ret := _m.Called(facilitatorID, batch, year)
+// StorePresenterFeedbacks provides a mock function with given fields: feedbacks
+func (_m *Repository) StorePresenterFeedbacks(feedbacks []*feedback.PresenterFeedback) error {
+	ret := _m.Called(feedbacks)
 
-	var r0 *feedback.BatchFeedbackFacilitator
-	if rf, ok := ret.Get(0).(func(int64, int64, int64) *feedback.BatchFeedbackFacilitator); ok {
-		r0 = rf(facilitatorID, batch, year)
+	var r0 error
+	if rf, ok := ret.Get(0).(func([]*feedback.PresenterFeedback) error); ok {
+		r0 = rf(feedbacks)
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*feedback.BatchFeedbackFacilitator)
-		}
+		r0 = ret.Error(0)
 	}
 
-	var r1 error
-	if rf, ok := ret.Get(1).(func(int64, int64, int64) error); ok {
-		r1 = rf(facilitatorID, batch, year)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
+	return r0
 }

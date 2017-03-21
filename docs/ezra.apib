@@ -419,8 +419,31 @@ If there is no class with specified ID
 
 + Attributes (Error)
 
+# Group Feedback Mapping
+
+Feedback mapping
+
+## Store Feedbacks [POST /feedback-mapping/presenter]
+
+Add new feedback mapping
+
++ Request (application/json)
+  + Attributes (Feedback Mapping Presenter)
+
 
 # Data Structures
+
+## Feedback Mapping Presenter
+
++ presenter_id: 12345 (number, required) - ID of presenter
++ class_id: `jpcc-col-1-2017` (string, required) - ID of the class
++ mapping: (array[Mapping])
++ values: (array[string]))
+
+## Mapping
++ header_id: 0 (number, required) - Header ID from google spreadsheets headers (start from 0 indicate the first column header)
++ rating_id: 1 (number, required) - Rating ID
+
 
 ## Participant
 

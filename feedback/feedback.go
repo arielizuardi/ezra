@@ -28,30 +28,25 @@ var FacilitatorRatingKey = []string{
 	`Bersikap profesional, berbusana rapi serta berperilaku & bertutur kata sopan`,
 }
 
-// Rating represents rating name and rating score
-// e.g Rating{1,` Mampu menjelaskan tujuan dan manfaat kelas ini dengan baik`, 5}
-type Rating struct {
-	Key         string
-	Description string
-	Score       int64
-}
+// Field
+// e.g Field{1,` Mampu menjelaskan tujuan dan manfaat kelas ini dengan baik`, 5}
+// e.g Field{3,` Strength Statement`, `Suka sekali memasak`}
 
-// NewRating returns new instance of rating
-func NewRating(key string, description string, score int64) *Rating {
-	return &Rating{key, description, score}
+type Field struct {
+	ID    int64
+	Name  string
+	Value interface{}
 }
 
 // PresenterFeedback represents presenter feedback
 type PresenterFeedback struct {
-	Class              *class.Class
-	Session            int64
-	Presenter          *presenter.Presenter
-	Participant        *participant.Participant
-	Ratings            []*Rating
-	PositiveComment    string
-	ImprovementComment string
-	CreatedAt          time.Time
-	UpdatedAt          time.Time
+	Class       *class.Class
+	Session     int64
+	Presenter   *presenter.Presenter
+	Participant *participant.Participant
+	Fields      []*Field
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
 }
 
 // FacilitatorFeedback represents facilitator feedback
@@ -59,30 +54,7 @@ type FacilitatorFeedback struct {
 	Class       *class.Class
 	Facilitator *facilitator.Facilitator
 	Participant *participant.Participant
-	Ratings     []*Rating
-	Comment     string
+	Fields      []*Field
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
-}
-
-type BatchFeedbackFacilitator struct {
-	Class         *class.Class
-	Facilitator   *facilitator.Facilitator
-	BagOfFeedback []*Feedback
-}
-
-type SessionFeedbackPresenter struct {
-	Class         *class.Class
-	Session       int64
-	Presenter     *presenter.Presenter
-	BagOfFeedback []*Feedback
-}
-
-type Feedback struct {
-	Participant        *participant.Participant
-	Ratings            []*Rating
-	PositiveComment    string
-	ImprovementComment string
-	CreatedAt          time.Time
-	UpdatedAt          time.Time
 }

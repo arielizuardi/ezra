@@ -1,5 +1,6 @@
 package usecase
 
+/*
 import (
 	"github.com/arielizuardi/ezra/facilitator"
 	"github.com/arielizuardi/ezra/feedback"
@@ -156,3 +157,4 @@ func NewReportUsecase(
 		FeedbackRepository:    feedbackRepository,
 	}
 }
+*/
