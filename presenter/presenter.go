@@ -7,4 +7,5 @@ var (
 )
 
 type Presenter struct {
+	ID int64
 }

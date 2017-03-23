@@ -10,11 +10,11 @@ type Repository struct {
 }
 
 // GetClass provides a mock function with given fields: classID
-func (_m *Repository) GetClass(classID int64) (*class.Class, error) {
+func (_m *Repository) GetClass(classID string) (*class.Class, error) {
 	ret := _m.Called(classID)
 
 	var r0 *class.Class
-	if rf, ok := ret.Get(0).(func(int64) *class.Class); ok {
+	if rf, ok := ret.Get(0).(func(string) *class.Class); ok {
 		r0 = rf(classID)
 	} else {
 		if ret.Get(0) != nil {
@@ -23,7 +23,7 @@ func (_m *Repository) GetClass(classID int64) (*class.Class, error) {
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(int64) error); ok {
+	if rf, ok := ret.Get(1).(func(string) error); ok {
 		r1 = rf(classID)
 	} else {
 		r1 = ret.Error(1)

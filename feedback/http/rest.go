@@ -18,8 +18,9 @@ type feedbackHTTPHandler struct {
 
 // PresenterFeedbackRequest ...
 type PresenterFeedbackRequest struct {
-	ClassID     int64                      `json:"class_id"`
+	ClassID     string                     `json:"class_id"`
 	PresenterID int64                      `json:"presenter_id"`
+	SessionID   int64                      `json:"session_id"`
 	Mappings    []*feedbackusecase.Mapping `json:"mappings"`
 	Values      [][]string                 `json:"values"`
 }
@@ -30,7 +31,7 @@ func (f *feedbackHTTPHandler) HandleStorePresenterFeedbackFromGsheet(c echo.Cont
 		return c.JSON(http.StatusUnprocessableEntity, &ResponseError{err.Error()})
 	}
 
-	if err := f.FeedbackUsecase.StorePresenterFeedbackWithMapping(pf.PresenterID, pf.ClassID, pf.Mappings, pf.Values); err != nil {
+	if err := f.FeedbackUsecase.StorePresenterFeedbackWithMapping(pf.PresenterID, pf.ClassID, pf.SessionID, pf.Mappings, pf.Values); err != nil {
 		return c.JSON(http.StatusInternalServerError, &ResponseError{err.Error()})
 	}
 

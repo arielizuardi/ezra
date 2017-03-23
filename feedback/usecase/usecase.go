@@ -16,7 +16,7 @@ type Mapping struct {
 }
 
 type FeedbackUsecase interface {
-	StorePresenterFeedbackWithMapping(presenterID int64, classID int64, mappings []*Mapping, values [][]string) error
+	StorePresenterFeedbackWithMapping(presenterID int64, classID string, sessionID int64, mappings []*Mapping, values [][]string) error
 }
 
 type feedbackUsecase struct {
@@ -27,7 +27,7 @@ type feedbackUsecase struct {
 	FeedbackRepository    f.Repository
 }
 
-func (u *feedbackUsecase) StorePresenterFeedbackWithMapping(presenterID int64, classID int64, mappings []*Mapping, values [][]string) error {
+func (u *feedbackUsecase) StorePresenterFeedbackWithMapping(presenterID int64, classID string, sessionID int64, mappings []*Mapping, values [][]string) error {
 
 	class, err := u.ClassRepository.GetClass(classID)
 	if err != nil {
@@ -62,7 +62,7 @@ func (u *feedbackUsecase) StorePresenterFeedbackWithMapping(presenterID int64, c
 		for headerIDX, v := range value {
 			for _, mapping := range mappings {
 				if headerIDX == int(mapping.HeaderID) {
-					fields = append(fields, &feedback.Field{ID: mapping.FieldID, Name: ``, Value: v})
+					fields = append(fields, &feedback.Field{ID: mapping.FieldID, Value: v})
 				}
 			}
 		}

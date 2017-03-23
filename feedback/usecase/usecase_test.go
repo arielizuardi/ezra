@@ -17,7 +17,8 @@ import (
 
 func TestStorePresenterFeedbackWithMapping(t *testing.T) {
 	presenterID := int64(0)
-	classID := int64(0)
+	classID := `col-b2-2016`
+	sessionID := int64(1)
 	mappings := []*usecase.Mapping{}
 	values := [][]string{}
 
@@ -39,6 +40,6 @@ func TestStorePresenterFeedbackWithMapping(t *testing.T) {
 		mockFeedbackRepo,
 	)
 
-	err := u.StorePresenterFeedbackWithMapping(presenterID, classID, mappings, values)
+	err := u.StorePresenterFeedbackWithMapping(presenterID, classID, sessionID, mappings, values)
 	assert.NoError(t, err)
 }

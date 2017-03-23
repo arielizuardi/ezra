@@ -33,15 +33,14 @@ var FacilitatorRatingKey = []string{
 // e.g Field{3,` Strength Statement`, `Suka sekali memasak`}
 
 type Field struct {
-	ID    int64
-	Name  string
-	Value interface{}
+	ID    int64       `json:"id"`
+	Value interface{} `json:"value"`
 }
 
 // PresenterFeedback represents presenter feedback
 type PresenterFeedback struct {
 	Class       *class.Class
-	Session     int64
+	Session     *class.Session
 	Presenter   *presenter.Presenter
 	Participant *participant.Participant
 	Fields      []*Field
