@@ -1,13 +1,20 @@
 package usecase
 
 import (
-	"github.com/Sirupsen/logrus"
+	"strconv"
+	"time"
+
 	c "github.com/arielizuardi/ezra/class/repository"
 	fcl "github.com/arielizuardi/ezra/facilitator/repository"
 	"github.com/arielizuardi/ezra/feedback"
 	f "github.com/arielizuardi/ezra/feedback/repository"
+	"github.com/arielizuardi/ezra/participant"
 	prt "github.com/arielizuardi/ezra/participant/repository"
 	p "github.com/arielizuardi/ezra/presenter/repository"
+)
+
+var (
+	ParticipantNameFieldID = 2
 )
 
 type Mapping struct {
@@ -17,7 +24,7 @@ type Mapping struct {
 
 type FeedbackUsecase interface {
 	FetchAllFeedbackFields() ([]*feedback.Field, error)
-	StorePresenterFeedbackWithMapping(presenterID int64, classID string, sessionID int64, mappings []*Mapping, values [][]string) error
+	StorePresenterFeedbackWithMapping(presenterID int64, classID string, sessionID int64, mappings []*Mapping, values [][]string) ([]*feedback.PresenterFeedback, error)
 }
 
 type feedbackUsecase struct {
@@ -32,76 +39,97 @@ func (u *feedbackUsecase) FetchAllFeedbackFields() ([]*feedback.Field, error) {
 	return u.FetchAllFeedbackFields()
 }
 
-func (u *feedbackUsecase) StorePresenterFeedbackWithMapping(presenterID int64, classID string, sessionID int64, mappings []*Mapping, values [][]string) error {
+func (u *feedbackUsecase) StorePresenterFeedbackWithMapping(presenterID int64, classID string, sessionID int64, mappings []*Mapping, values [][]string) ([]*feedback.PresenterFeedback, error) {
 
 	class, err := u.ClassRepository.GetClass(classID)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	presenter, err := u.PresenterRepository.GetPresenter(presenterID)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	var presenterFeedbacks []*feedback.PresenterFeedback
 	// start loop from values, every loop represent every row
 	for _, value := range values {
-
 		pf := new(feedback.PresenterFeedback)
 		pf.Class = class
 		pf.Presenter = presenter
+		ptc, fields, err := u.ConvertToParticipantAndFields(mappings, value)
 
-		participantID := int64(0) // must get from mapping information
-		participant, err := u.ParticipantRepository.GetParticipant(participantID)
 		if err != nil {
-			logrus.Error(err)
-			// just skip if no participant found for that particular id
-			continue
+			return nil, err
 		}
 
-		pf.Participant = participant
-
-		var fields []*feedback.Field
-		// now we loop every column in value, find the match maapping then store to fields
-		for headerIDX, v := range value {
-			for _, mapping := range mappings {
-				if headerIDX == int(mapping.HeaderID) {
-					fields = append(fields, &feedback.Field{ID: mapping.FieldID, Value: v})
-				}
-			}
-		}
-
-		if len(fields) > 0 {
-			pf.Fields = fields
-		}
+		pf.Participant = ptc
+		pf.Fields = fields
 
 		presenterFeedbacks = append(presenterFeedbacks, pf)
 	}
 
 	if len(presenterFeedbacks) > 0 {
 		if err := u.FeedbackRepository.StorePresenterFeedbacks(presenterFeedbacks); err != nil {
-			return err
+			return nil, err
 		}
 	}
 
-	// header {0:judul, 1:timestamp}
-	// value [`judul`, 12345]
-	// value [`judul2`, 12345]
-	// rating {1: judul, 2: timestamp}
-	// store(presenter_id, class_id, participant_id, rating_id, rating_value)
-	// or store(presenter, class, participant, rating)
-	// or store(presenter, class, participant, ratings)
-	// if using no sql
-	// {
-	// 		"presenter": {},
-	// 		"class" : {}
-	//		"ratings": [{}, {}]
-	// }
-	// sql
-	// presenter_id, class_id, rating_id, rating_value
+	return presenterFeedbacks, nil
+}
 
-	return nil
+func (u *feedbackUsecase) ConvertToParticipantAndFields(mappings []*Mapping, value []string) (*participant.Participant, []*feedback.Field, error) {
+
+	var fields []*feedback.Field
+	var ptc *participant.Participant
+	var err error
+
+	// now we loop every column in value, find the match mapping then store to fields
+	for headeridx, v := range value {
+		for _, mapping := range mappings {
+			mappingHeaderID := int(mapping.HeaderID)
+			mappingFieldID := int(mapping.FieldID)
+
+			if headeridx == mappingHeaderID && mappingFieldID == ParticipantNameFieldID {
+
+				ptc, err = u.findOrCreateParticipant(v)
+				if err != nil {
+					return nil, nil, err
+				}
+
+			} else if headeridx == mappingHeaderID {
+				fields = append(fields, &feedback.Field{ID: mapping.FieldID, Value: v})
+			}
+		}
+
+	}
+
+	return ptc, fields, nil
+}
+
+func (u *feedbackUsecase) findOrCreateParticipant(name string) (*participant.Participant, error) {
+	p, err := u.ParticipantRepository.GetParticipantByName(name)
+	if err != nil {
+		return nil, err
+	}
+
+	if p == nil {
+		now := time.Now()
+		unixnano := now.UnixNano()
+		email := strconv.Itoa(int(unixnano)) + `@noemail.com`
+		newParticipant := new(participant.Participant)
+		newParticipant.Email = email
+		newParticipant.Name = name
+
+		err := u.ParticipantRepository.StoreParticipant(p)
+		if err != nil {
+			return nil, err
+		}
+
+		return newParticipant, nil
+	}
+
+	return p, nil
 }
 
 func NewFeedbackUsecase(
