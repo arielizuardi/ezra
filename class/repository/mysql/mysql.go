@@ -2,6 +2,7 @@ package mysql
 
 import (
 	"database/sql"
+	"fmt"
 	"strconv"
 	"strings"
 	"time"
@@ -15,9 +16,11 @@ type MySQLClassRepository struct {
 
 func (m *MySQLClassRepository) GetClass(classID string) (*class.Class, error) {
 	row := m.DBConn.QueryRow(`SELECT id, name, batch, year FROM class WHERE id = ? `, classID)
-	var c *class.Class
+
+	c := new(class.Class)
 	err := row.Scan(&c.ID, &c.Name, &c.Batch, &c.Year)
 	if err != nil {
+		fmt.Printf(`%v`, err)
 		return nil, err
 	}
 
