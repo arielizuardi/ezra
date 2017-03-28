@@ -31,3 +31,17 @@ func (_m *Repository) GetClass(classID string) (*class.Class, error) {
 
 	return r0, r1
 }
+
+// StoreClass provides a mock function with given fields: c
+func (_m *Repository) StoreClass(c *class.Class) error {
+	ret := _m.Called(c)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(*class.Class) error); ok {
+		r0 = rf(c)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
