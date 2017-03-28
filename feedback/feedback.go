@@ -28,13 +28,14 @@ var FacilitatorRatingKey = []string{
 	`Bersikap profesional, berbusana rapi serta berperilaku & bertutur kata sopan`,
 }
 
-// Field
+// Field ...
 // e.g Field{1,` Mampu menjelaskan tujuan dan manfaat kelas ini dengan baik`, 5}
 // e.g Field{3,` Strength Statement`, `Suka sekali memasak`}
-
 type Field struct {
-	ID    int64       `json:"id"`
-	Value interface{} `json:"value"`
+	ID          int64       `json:"id"`
+	Name        string      `json:"name"`
+	Description string      `json:"description"`
+	Value       interface{} `json:"value"`
 }
 
 // PresenterFeedback represents presenter feedback

@@ -16,6 +16,7 @@ type Mapping struct {
 }
 
 type FeedbackUsecase interface {
+	FetchAllFeedbackFields() ([]*feedback.Field, error)
 	StorePresenterFeedbackWithMapping(presenterID int64, classID string, sessionID int64, mappings []*Mapping, values [][]string) error
 }
 
@@ -25,6 +26,10 @@ type feedbackUsecase struct {
 	FacilitatorRepository fcl.Repository
 	ParticipantRepository prt.Repository
 	FeedbackRepository    f.Repository
+}
+
+func (u *feedbackUsecase) FetchAllFeedbackFields() ([]*feedback.Field, error) {
+	return u.FetchAllFeedbackFields()
 }
 
 func (u *feedbackUsecase) StorePresenterFeedbackWithMapping(presenterID int64, classID string, sessionID int64, mappings []*Mapping, values [][]string) error {

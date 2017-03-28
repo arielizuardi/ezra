@@ -8,18 +8,44 @@ import (
 	"github.com/arielizuardi/ezra/feedback"
 )
 
+// MySQLFeedbackRepository ...
 type MySQLFeedbackRepository struct {
 	DBConn *sql.DB
 }
 
+// FetchAllFeedbackFields ...
+func (m *MySQLFeedbackRepository) FetchAllFeedbackFields() ([]*feedback.Field, error) {
+
+	rows, err := m.DBConn.Query(`SELECT id, name, description FROM feedback_field`)
+	if err != nil {
+		return nil, err
+	}
+
+	var fields []*feedback.Field
+	for rows.Next() {
+		f := new(feedback.Field)
+		err := rows.Scan(&f.ID, &f.Name, &f.Description)
+		if err != nil {
+			return nil, err
+		}
+
+		fields = append(fields, f)
+	}
+
+	return fields, nil
+}
+
+// FetchFacilitatorFeedbacks ...
 func (m *MySQLFeedbackRepository) FetchFacilitatorFeedbacks(facilitatorID int64, batch int64, year int64) ([]*feedback.FacilitatorFeedback, error) {
 	return nil, nil
 }
 
+// FetchPresenterFeedbacks ...
 func (m *MySQLFeedbackRepository) FetchPresenterFeedbacks(presenterID int64, session int64, batch int64, year int64) ([]*feedback.PresenterFeedback, error) {
 	return nil, nil
 }
 
+// StorePresenterFeedbacks ...
 func (m *MySQLFeedbackRepository) StorePresenterFeedbacks(feedbacks []*feedback.PresenterFeedback) error {
 
 	// `fields` should be in JSON format

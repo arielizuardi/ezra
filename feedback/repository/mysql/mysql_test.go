@@ -32,6 +32,33 @@ func (s *MySQLTest) SetupTest() {
 	assert.Len(s.T(), errs, 0)
 }
 
+func (s *MySQLTest) seed() {
+	_, err := s.DBConn.Exec(`INSERT INTO feedback_field (name, description) VALUE (?, ?)`, `Timestamp`, `Timestamp`)
+	assert.NoError(s.T(), err)
+	_, err = s.DBConn.Exec(`INSERT INTO feedback_field (name, description) VALUE (?, ?)`, `Nama Partisipan`, `Nama Partisipan`)
+	assert.NoError(s.T(), err)
+	_, err = s.DBConn.Exec(`INSERT INTO feedback_field (name, description) VALUE (?, ?)`, `D.A.T.E`, `D.A.T.E`)
+	assert.NoError(s.T(), err)
+	_, err = s.DBConn.Exec(`INSERT INTO feedback_field (name, description) VALUE (?, ?)`, `Penguasaan Materi`, `Penguasaan Materi`)
+	assert.NoError(s.T(), err)
+	_, err = s.DBConn.Exec(`INSERT INTO feedback_field (name, description) VALUE (?, ?)`, `Sistematika Penyajian`, `Sistematika Penyajian`)
+	assert.NoError(s.T(), err)
+	_, err = s.DBConn.Exec(`INSERT INTO feedback_field (name, description) VALUE (?, ?)`, `Gaya atau metode penyajian`, `Gaya atau metode penyajian`)
+	assert.NoError(s.T(), err)
+	_, err = s.DBConn.Exec(`INSERT INTO feedback_field (name, description) VALUE (?, ?)`, `Pengaturan Waktu`, `Pengaturan Waktu`)
+	assert.NoError(s.T(), err)
+	_, err = s.DBConn.Exec(`INSERT INTO feedback_field (name, description) VALUE (?, ?)`, `Penggunaan alat bantu`, `Penggunaan alat bantu`)
+	assert.NoError(s.T(), err)
+	_, err = s.DBConn.Exec(`INSERT INTO feedback_field (name, description) VALUE (?, ?)`, `Nilai keseluruhan`, `Nilai keseluruhan`)
+	assert.NoError(s.T(), err)
+	_, err = s.DBConn.Exec(`INSERT INTO feedback_field (name, description) VALUE (?, ?)`, `Hal-hal yang saya suka`, `Hal-hal yang saya suka`)
+	assert.NoError(s.T(), err)
+	_, err = s.DBConn.Exec(`INSERT INTO feedback_field (name, description) VALUE (?, ?)`, `Hal-hal yang saya harapkan`, `Hal-hal yang saya harapkan`)
+	assert.NoError(s.T(), err)
+	_, err = s.DBConn.Exec(`INSERT INTO feedback_field (name, description) VALUE (?, ?)`, `Holy Discontent`, `Holy Discontent`)
+	assert.NoError(s.T(), err)
+}
+
 func (s *MySQLTest) TearDownTest() {
 }
 
@@ -70,4 +97,13 @@ func (s *MySQLTest) TestStore() {
 	feedbacks := []*feedback.PresenterFeedback{f}
 	err := m.StorePresenterFeedbacks(feedbacks)
 	assert.NoError(s.T(), err)
+}
+
+func (s *MySQLTest) TestFetchAllFeedbackFields() {
+	s.seed()
+	m := &mysql.MySQLFeedbackRepository{s.DBConn}
+	res, err := m.FetchAllFeedbackFields()
+
+	assert.NoError(s.T(), err)
+	assert.Len(s.T(), res, 12)
 }
