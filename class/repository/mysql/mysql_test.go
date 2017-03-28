@@ -54,3 +54,12 @@ func (s *MySQLTest) TestGetClass() {
 	assert.NoError(s.T(), err)
 	assert.NotNil(s.T(), c)
 }
+
+func (s *MySQLTest) TestFetchAllClasses() {
+	s.seed()
+	r := mysql.NewMySQLClassRepository(s.DBConn)
+	classes, err := r.FetchAllClasses()
+	assert.NoError(s.T(), err)
+	assert.Len(s.T(), classes, 1)
+	assert.Equal(s.T(), `COL-B1-2016`, classes[0].ID)
+}

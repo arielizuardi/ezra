@@ -40,6 +40,25 @@ func (m *MySQLClassRepository) StoreClass(c *class.Class) error {
 	return nil
 }
 
+func (m *MySQLClassRepository) FetchAllClasses() ([]*class.Class, error) {
+	res, err := m.DBConn.Query(`SELECT id, name, batch, year FROM class`)
+	if err != nil {
+		return nil, err
+	}
+
+	var classes []*class.Class
+	if res.Next() {
+		c := new(class.Class)
+		err := res.Scan(&c.ID, &c.Name, &c.Batch, &c.Year)
+		if err != nil {
+			return nil, err
+		}
+		classes = append(classes, c)
+	}
+
+	return classes, nil
+}
+
 func NewMySQLClassRepository(dbConn *sql.DB) *MySQLClassRepository {
 	return &MySQLClassRepository{DBConn: dbConn}
 }
