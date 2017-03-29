@@ -28,6 +28,10 @@ func (s *MySQLTest) SetupTest() {
 	assert.Len(s.T(), errs, 0)
 }
 
+func (s *MySQLTest) TearDownTest() {
+
+}
+
 func (s *MySQLTest) seed() {
 	_, err := s.DBConn.Exec(`INSERT INTO participant (email, name, date, dob, phone_number) VALUE (?, ?, ?, ?, ?)`, `john@doe.com`, `John Doe`, `Epic`, `01-Jan-1990`, `+6281912001200`)
 	assert.NoError(s.T(), err)

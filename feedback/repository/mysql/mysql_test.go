@@ -79,7 +79,7 @@ func (s *MySQLTest) TestStore() {
 	f.Session = ses
 
 	pt := new(participant.Participant)
-	pt.ID = int64(1)
+	pt.Email = `john@doe.com`
 
 	f.Participant = pt
 

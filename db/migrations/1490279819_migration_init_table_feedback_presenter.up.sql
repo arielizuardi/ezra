@@ -3,7 +3,7 @@ CREATE TABLE `jpcccol_db`.`feedback_presenter` (
   `class_id` VARCHAR(45) NOT NULL COMMENT '',
   `session_id` INT NOT NULL COMMENT '',
   `presenter_id` INT NOT NULL COMMENT '',
-  `participant_id` INT NULL COMMENT '',
+  `participant_email` VARCHAR(200) NULL COMMENT '',
   `fields` JSON NULL COMMENT '',
   `created_at` DATETIME NULL COMMENT '',
   `updated_at` DATETIME NULL COMMENT '',
