@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	feedbackusecase "github.com/arielizuardi/ezra/feedback/usecase"
+	"github.com/arielizuardi/ezra/validator"
 	"github.com/labstack/echo"
 )
 
@@ -12,26 +13,32 @@ type ResponseError struct {
 	Message string `json:"error"`
 }
 
-type feedbackHTTPHandler struct {
+type FeedbackHTTPHandler struct {
 	FeedbackUsecase feedbackusecase.FeedbackUsecase
 }
 
 // PresenterFeedbackRequest ...
 type PresenterFeedbackRequest struct {
-	ClassID     string                     `json:"class_id"`
-	PresenterID int64                      `json:"presenter_id"`
-	SessionID   int64                      `json:"session_id"`
-	Mappings    []*feedbackusecase.Mapping `json:"mappings"`
-	Values      [][]string                 `json:"values"`
+	ClassID     string                     `json:"class_id" validate:"required"`
+	PresenterID int64                      `json:"presenter_id" validate:"required"`
+	SessionID   int64                      `json:"session_id" validate:"required"`
+	Mappings    []*feedbackusecase.Mapping `json:"mappings" validate:"required"`
+	Values      [][]string                 `json:"values" validate:"required"`
 }
 
-func (f *feedbackHTTPHandler) HandleStorePresenterFeedbackFromGsheet(c echo.Context) error {
+func (f *FeedbackHTTPHandler) HandleStorePresenterFeedbackFromGsheet(c echo.Context) error {
+	// TODO rest_test and change the way to generate report
 	pf := new(PresenterFeedbackRequest)
 	if err := c.Bind(&pf); err != nil {
 		return c.JSON(http.StatusUnprocessableEntity, &ResponseError{err.Error()})
 	}
 
-	if err := f.FeedbackUsecase.StorePresenterFeedbackWithMapping(pf.PresenterID, pf.ClassID, pf.SessionID, pf.Mappings, pf.Values); err != nil {
+	vld := validator.NewRequestValidator()
+	if err := vld.Validate(pf); err != nil {
+		return c.JSON(http.StatusBadRequest, &ResponseError{err.Error()})
+	}
+
+	if _, err := f.FeedbackUsecase.StorePresenterFeedbackWithMapping(pf.PresenterID, pf.ClassID, pf.SessionID, pf.Mappings, pf.Values); err != nil {
 		return c.JSON(http.StatusInternalServerError, &ResponseError{err.Error()})
 	}
 
@@ -40,6 +47,6 @@ func (f *feedbackHTTPHandler) HandleStorePresenterFeedbackFromGsheet(c echo.Cont
 
 // Init ...
 func Init(e *echo.Echo, feedbackUsecase feedbackusecase.FeedbackUsecase) {
-	h := &feedbackHTTPHandler{feedbackUsecase}
+	h := &FeedbackHTTPHandler{feedbackUsecase}
 	e.POST(`/presenter/:id/feedbackmapping`, h.HandleStorePresenterFeedbackFromGsheet)
 }
