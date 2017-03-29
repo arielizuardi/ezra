@@ -24,3 +24,5 @@ import:
   version: ^3.1.0-rc.1
 - package: github.com/Sirupsen/logrus
   version: ^0.11.4
+- package: github.com/go-playground/universal-translator
+  version: ^0.16.0

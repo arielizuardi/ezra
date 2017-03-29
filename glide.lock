@@ -1,5 +1,5 @@
-hash: a6a4dcab8beae8aba4667446717cedd754af17989b88f8b1940a9082f678332e
-updated: 2017-03-24T14:22:35.680909916+07:00
+hash: 4eab08ec65735e0bb642485976e869554642fc9d9c742694f387f82b890c9d82
+updated: 2017-03-29T23:21:26.327181646+07:00
 imports:
 - name: github.com/arielizuardi/envase
   version: 2af3e35f11ee705895d4015aac202a0f9471a542
@@ -48,6 +48,12 @@ imports:
   version: 0dadbb0345b35ec7ef35e228dabb8de89a65bf52
 - name: github.com/docker/libtrust
   version: aabc10ec26b754e797f9028f4589c5b7bd90dc20
+- name: github.com/go-playground/locales
+  version: 084b0226cf88d891a2bdeccac01d592af13a8f7b
+  subpackages:
+  - currency
+- name: github.com/go-playground/universal-translator
+  version: b32fa301c9fe55953584134cb6853a13c87ec0a1
 - name: github.com/go-sql-driver/mysql
   version: ffa70d4981de905bced351b5703851f8e8755225
 - name: github.com/labstack/echo
