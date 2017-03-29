@@ -9,6 +9,29 @@ type Repository struct {
 	mock.Mock
 }
 
+// FetchAllFeedbackFields provides a mock function with given fields:
+func (_m *Repository) FetchAllFeedbackFields() ([]*feedback.Field, error) {
+	ret := _m.Called()
+
+	var r0 []*feedback.Field
+	if rf, ok := ret.Get(0).(func() []*feedback.Field); ok {
+		r0 = rf()
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]*feedback.Field)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func() error); ok {
+		r1 = rf()
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // FetchFacilitatorFeedbacks provides a mock function with given fields: facilitatorID, batch, year
 func (_m *Repository) FetchFacilitatorFeedbacks(facilitatorID int64, batch int64, year int64) ([]*feedback.FacilitatorFeedback, error) {
 	ret := _m.Called(facilitatorID, batch, year)
@@ -53,4 +76,18 @@ func (_m *Repository) FetchPresenterFeedbacks(presenterID int64, session int64, 
 	}
 
 	return r0, r1
+}
+
+// StorePresenterFeedbacks provides a mock function with given fields: feedbacks
+func (_m *Repository) StorePresenterFeedbacks(feedbacks []*feedback.PresenterFeedback) error {
+	ret := _m.Called(feedbacks)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func([]*feedback.PresenterFeedback) error); ok {
+		r0 = rf(feedbacks)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
 }

@@ -1,5 +1,6 @@
 package usecase
 
+/*
 import (
 	"github.com/arielizuardi/ezra/facilitator"
 	"github.com/arielizuardi/ezra/feedback"
@@ -37,7 +38,7 @@ func (r *reportUsecase) GenerateFacilitatorReport(facilitatorID int64, batch int
 	facilitatorReport := new(report.FacilitatorReport)
 	facilitatorReport.Facilitator = facil
 
-	facilitatorFeedbacks, err := r.FeedbackRepository.FetchFacilitatorFeedbacks(facilitatorID, batch, year)
+	batchFeedbackFacilitator, err := r.FeedbackRepository.GetBatchFeedbackFacilitator(facilitatorID, batch, year)
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +47,7 @@ func (r *reportUsecase) GenerateFacilitatorReport(facilitatorID int64, batch int
 	ct := make(map[string]int64)
 	avg := make(map[string]float64)
 
-	for _, facilitatorFeedback := range facilitatorFeedbacks {
+	for _, facilitatorFeedback := range batchFeedbackFacilitator.BagOfFeedback {
 		for _, rating := range facilitatorFeedback.Ratings {
 			_, ok := sum[rating.Key]
 			if !ok {
@@ -156,3 +157,4 @@ func NewReportUsecase(
 		FeedbackRepository:    feedbackRepository,
 	}
 }
+*/

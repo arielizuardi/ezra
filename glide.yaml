@@ -1,0 +1,28 @@
+package: github.com/arielizuardi/ezra
+import:
+- package: github.com/docker/docker
+  subpackages:
+  - api/types
+  - api/types/container
+  - client
+- package: github.com/docker/go-connections
+  subpackages:
+  - nat
+- package: github.com/go-sql-driver/mysql
+- package: github.com/mattes/migrate
+  version: ^1.3.0
+  subpackages:
+  - driver/mysql
+  - migrate
+- package: github.com/stretchr/testify
+  subpackages:
+  - assert
+  - mock
+  - suite
+- package: gopkg.in/go-playground/validator.v9
+- package: github.com/labstack/echo
+  version: ^3.1.0-rc.1
+- package: github.com/Sirupsen/logrus
+  version: ^0.11.4
+- package: github.com/go-playground/universal-translator
+  version: ^0.16.0

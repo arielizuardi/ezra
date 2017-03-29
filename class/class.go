@@ -11,6 +11,7 @@ const (
 
 // Class represents class
 type Class struct {
+	ID    string
 	Name  string
 	Batch int64
 	Year  int64

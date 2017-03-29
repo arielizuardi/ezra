@@ -3,5 +3,7 @@ package repository
 import "github.com/arielizuardi/ezra/presenter"
 
 type Repository interface {
-	Get(presenterID int64) (*presenter.Presenter, error)
+	GetPresenter(presenterID int64) (*presenter.Presenter, error)
+	FetchAllPresenters() ([]*presenter.Presenter, error)
+	StorePresenter(p *presenter.Presenter) error
 }
