@@ -1,0 +1,22 @@
+language: go
+
+go:
+  - 1.7
+
+sudo: required
+
+services:
+  - docker
+
+env:
+  global:
+    - PROJECT=ezra
+
+before_install:
+  - export DOCKER_API_VERSION=1.24
+  - export TZ=Asia/Jakarta
+  - curl https://glide.sh/get | sh
+  - docker pull mysql:5.7
+
+before_script:
+  - glide install -v
