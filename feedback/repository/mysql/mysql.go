@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"time"
 
+	"github.com/arielizuardi/ezra/class"
 	"github.com/arielizuardi/ezra/feedback"
 )
 
@@ -36,12 +37,12 @@ func (m *MySQLFeedbackRepository) FetchAllFeedbackFields() ([]*feedback.Field, e
 }
 
 // FetchFacilitatorFeedbacks ...
-func (m *MySQLFeedbackRepository) FetchFacilitatorFeedbacks(facilitatorID int64, batch int64, year int64) ([]*feedback.FacilitatorFeedback, error) {
+func (m *MySQLFeedbackRepository) FetchFacilitatorFeedbacks(facilitatorID int64, c *class.Class) ([]*feedback.FacilitatorFeedback, error) {
 	return nil, nil
 }
 
 // FetchPresenterFeedbacks ...
-func (m *MySQLFeedbackRepository) FetchPresenterFeedbacks(presenterID int64, session int64, batch int64, year int64) ([]*feedback.PresenterFeedback, error) {
+func (m *MySQLFeedbackRepository) FetchPresenterFeedbacks(presenterID int64, c *class.Class, s *class.Session) ([]*feedback.PresenterFeedback, error) {
 	return nil, nil
 }
 
@@ -83,4 +84,8 @@ func (m *MySQLFeedbackRepository) StorePresenterFeedbacks(feedbacks []*feedback.
 	trx.Commit()
 
 	return nil
+}
+
+func NewMySQLFeedbackRepository(dbConn *sql.DB) *MySQLFeedbackRepository {
+	return &MySQLFeedbackRepository{DBConn: dbConn}
 }

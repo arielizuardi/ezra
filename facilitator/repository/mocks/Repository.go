@@ -9,8 +9,8 @@ type Repository struct {
 	mock.Mock
 }
 
-// Get provides a mock function with given fields: facilitatorID
-func (_m *Repository) Get(facilitatorID int64) (*facilitator.Facilitator, error) {
+// GetFacilitator provides a mock function with given fields: facilitatorID
+func (_m *Repository) GetFacilitator(facilitatorID int64) (*facilitator.Facilitator, error) {
 	ret := _m.Called(facilitatorID)
 
 	var r0 *facilitator.Facilitator
