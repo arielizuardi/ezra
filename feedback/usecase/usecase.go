@@ -46,6 +46,11 @@ func (u *feedbackUsecase) StorePresenterFeedbackWithMapping(presenterID int64, c
 		return nil, err
 	}
 
+	session, err := u.ClassRepository.GetSession(sessionID)
+	if err != nil {
+		return nil, err
+	}
+
 	presenter, err := u.PresenterRepository.GetPresenter(presenterID)
 	if err != nil {
 		return nil, err
@@ -56,6 +61,7 @@ func (u *feedbackUsecase) StorePresenterFeedbackWithMapping(presenterID int64, c
 	for _, value := range values {
 		pf := new(feedback.PresenterFeedback)
 		pf.Class = class
+		pf.Session = session
 		pf.Presenter = presenter
 		ptc, fields, err := u.ConvertToParticipantAndFields(mappings, value)
 
@@ -121,7 +127,7 @@ func (u *feedbackUsecase) findOrCreateParticipant(name string) (*participant.Par
 		newParticipant.Email = email
 		newParticipant.Name = name
 
-		err := u.ParticipantRepository.StoreParticipant(p)
+		err := u.ParticipantRepository.StoreParticipant(newParticipant)
 		if err != nil {
 			return nil, err
 		}

@@ -34,8 +34,8 @@ var FacilitatorRatingKey = []string{
 type Field struct {
 	ID          int64       `json:"id"`
 	Name        string      `json:"name"`
-	Description string      `json:"description"`
-	Value       interface{} `json:"-"`
+	Description string      `json:"description, omitempty"`
+	Value       interface{} `json:"value, omitempty"`
 }
 
 // PresenterFeedback represents presenter feedback

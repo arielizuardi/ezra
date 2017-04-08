@@ -18,14 +18,15 @@ var (
 
 // Class represents class
 type Class struct {
-	ID    string
-	Name  string
-	Batch int64
-	Year  int64
+	ID    string `json:"id"`
+	Name  string `json:"name"`
+	Batch int64  `json:"batch"`
+	Year  int64  `json:"year"`
 }
 
 // Session represents session
 type Session struct {
-	ID   int64
-	Name string
+	ID          int64  `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
 }

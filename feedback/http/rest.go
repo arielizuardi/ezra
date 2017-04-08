@@ -58,5 +58,5 @@ func (f *FeedbackHTTPHandler) HandleFetchAllFeedbackFields(c echo.Context) error
 func Init(e *echo.Echo, feedbackUsecase feedbackusecase.FeedbackUsecase) {
 	h := &FeedbackHTTPHandler{feedbackUsecase}
 	e.GET(`/feedback/field`, h.HandleFetchAllFeedbackFields)
-	e.POST(`/presenter/:id/feedbackmapping`, h.HandleStorePresenterFeedbackFromGsheet)
+	e.POST(`/exportfeedback`, h.HandleStorePresenterFeedbackFromGsheet)
 }

@@ -27,6 +27,7 @@ import (
 	presenterusecase "github.com/arielizuardi/ezra/presenter/usecase"
 
 	"github.com/labstack/echo"
+	"github.com/labstack/echo/middleware"
 )
 
 var config cfg.Config
@@ -79,6 +80,8 @@ func main() {
 
 	presenterUsecase := presenterusecase.NewPresenterUsecase(presenterRepository)
 	presenterhttp.Init(e, presenterUsecase)
+
+	e.Use(middleware.CORS())
 
 	address := config.GetString(`server.address`)
 	logrus.Infof(`Ezra server running at address : %v`, address)

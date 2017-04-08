@@ -48,7 +48,6 @@ func (m *MySQLFeedbackRepository) FetchPresenterFeedbacks(presenterID int64, c *
 
 // StorePresenterFeedbacks ...
 func (m *MySQLFeedbackRepository) StorePresenterFeedbacks(feedbacks []*feedback.PresenterFeedback) error {
-
 	// `fields` should be in JSON format
 	feedbackQuery := `INSERT INTO feedback_presenter (class_id, session_id, presenter_id, participant_email, fields, created_at, updated_at) ` +
 		` VALUES (?, ?, ?, ?, ?, ?, ?)`
@@ -73,7 +72,6 @@ func (m *MySQLFeedbackRepository) StorePresenterFeedbacks(feedbacks []*feedback.
 		}
 
 		now := time.Now()
-
 		_, err = feedbackStmt.Exec(fd.Class.ID, fd.Session.ID, fd.Presenter.ID, fd.Participant.Email, string(byteFields), now, now)
 		if err != nil {
 			trx.Rollback()

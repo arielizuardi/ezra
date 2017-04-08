@@ -60,7 +60,33 @@ func (m *MySQLClassRepository) FetchAllClasses() ([]*class.Class, error) {
 }
 
 func (m *MySQLClassRepository) GetSession(sessionID int64) (*class.Session, error) {
-	return nil, nil
+	row := m.DBConn.QueryRow(`SELECT id, name, description FROM session WHERE id = ? `, sessionID)
+	s := new(class.Session)
+	err := row.Scan(&s.ID, &s.Name, &s.Description)
+	if err != nil {
+		return nil, err
+	}
+
+	return s, nil
+}
+
+func (m *MySQLClassRepository) FetchAllSessions() ([]*class.Session, error) {
+	res, err := m.DBConn.Query(`SELECT id, name, description FROM session`)
+	if err != nil {
+		return nil, err
+	}
+
+	var sessions []*class.Session
+	for res.Next() {
+		s := new(class.Session)
+		err := res.Scan(&s.ID, &s.Name, &s.Description)
+		if err != nil {
+			return nil, err
+		}
+		sessions = append(sessions, s)
+	}
+
+	return sessions, nil
 }
 
 func NewMySQLClassRepository(dbConn *sql.DB) *MySQLClassRepository {

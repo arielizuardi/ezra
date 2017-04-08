@@ -28,7 +28,12 @@ func (m *MySQLParticipantRepository) GetParticipantByName(name string) (*partici
 
 	p := new(participant.Participant)
 	err := row.Scan(&p.Email, &p.Name, &p.Date, &p.DOB, &p.PhoneNumber)
+
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
+
 		return nil, err
 	}
 
