@@ -1,6 +1,7 @@
 package usecase_test
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/arielizuardi/ezra/class"
@@ -62,73 +63,74 @@ func TestGeneratePresenterReport(t *testing.T) {
 	assert.Equal(t, float64(3.2), report.OverallAvg)
 }
 
-/*
-func TestGeneratePresenterReportNonExistsPresenter(t *testing.T) {
+func TestGeneratePresenterReportWithNotExistsClassAndNotExistsSession(t *testing.T) {
 	presenterID := int64(1)
-	session := int64(1)
-	batch := int64(1)
-	year := int64(2017)
+	classID := `jpcccol-b1-2016`
+	sessionID := int64(1)
 
-	pr := new(mocksPresenterRepository.Repository)
-	pr.On(`Get`, presenterID).Return(nil, nil)
+	classRepository := new(mockClass.Repository)
+	classRepository.On(`GetClass`, classID).Return(nil, nil)
 
-	fr := new(mocksFeedbackRepository.Repository)
-	fcr := new(mocksFacilitatorRepository.Repository)
-	u := usecase.NewReportUsecase(pr, fcr, fr)
+	presenterRepository := new(mockPresenter.Repository)
+	facilitatorRepository := new(mockFacil.Repository)
+	feedbackRepository := new(mockFeedback.Repository)
+	u := usecase.NewReportUsecase(classRepository, presenterRepository, facilitatorRepository, feedbackRepository)
+	_, err := u.GeneratePresenterReport(presenterID, classID, sessionID)
+	assert.EqualError(t, class.ErrClassNotFound, err.Error())
 
-	report, err := u.GeneratePresenterReport(presenterID, session, batch, year)
-	assert.EqualError(t, presenter.ErrPresenterNotFound, err.Error())
-	assert.Nil(t, report)
+	classRepository2 := new(mockClass.Repository)
+	classRepository2.On(`GetClass`, classID).Return(&class.Class{}, nil)
+	classRepository2.On(`GetSession`, sessionID).Return(nil, nil)
 
-	pr.AssertCalled(t, `Get`, presenterID)
-	fr.AssertNotCalled(t, `FetchPresenterFeedbacks`, presenterID, session, batch, year)
+	u2 := usecase.NewReportUsecase(classRepository2, presenterRepository, facilitatorRepository, feedbackRepository)
+	_, err = u2.GeneratePresenterReport(presenterID, classID, sessionID)
+	assert.EqualError(t, class.ErrSessionNotFound, err.Error())
 }
 
-func TestGeneratePresenterReportAndGetErrorFromPresenterRepository(t *testing.T) {
+func TestGeneratePresenterReportNonExistsPresenter(t *testing.T) {
 	presenterID := int64(1)
-	session := int64(1)
-	batch := int64(1)
-	year := int64(2017)
+	classID := `jpcccol-b1-2016`
+	sessionID := int64(1)
 
-	pr := new(mocksPresenterRepository.Repository)
-	pr.On(`Get`, presenterID).Return(nil, errors.New(`Whoops!`))
+	classRepository := new(mockClass.Repository)
+	classRepository.On(`GetClass`, classID).Return(&class.Class{}, nil)
+	classRepository.On(`GetSession`, sessionID).Return(&class.Session{}, nil)
 
-	fr := new(mocksFeedbackRepository.Repository)
-	fcr := new(mocksFacilitatorRepository.Repository)
-	u := usecase.NewReportUsecase(pr, fcr, fr)
+	presenterRepository := new(mockPresenter.Repository)
+	presenterRepository.On(`GetPresenter`, presenterID).Return(nil, nil)
 
-	report, err := u.GeneratePresenterReport(presenterID, session, batch, year)
-	assert.EqualError(t, errors.New(`Whoops!`), err.Error())
-	assert.Nil(t, report)
-
-	pr.AssertCalled(t, `Get`, presenterID)
-	fr.AssertNotCalled(t, `FetchPresenterFeedbacks`, presenterID, session, batch, year)
+	facilitatorRepository := new(mockFacil.Repository)
+	feedbackRepository := new(mockFeedback.Repository)
+	u := usecase.NewReportUsecase(classRepository, presenterRepository, facilitatorRepository, feedbackRepository)
+	_, err := u.GeneratePresenterReport(presenterID, classID, sessionID)
+	assert.EqualError(t, presenter.ErrPresenterNotFound, err.Error())
 }
 
 func TestGeneratePresenterReportAndGetErrorFromFeedbackRepository(t *testing.T) {
 	presenterID := int64(1)
-	session := int64(1)
-	batch := int64(1)
-	year := int64(2017)
+	classID := `jpcccol-b1-2016`
+	sessionID := int64(1)
 
-	pr := new(mocksPresenterRepository.Repository)
-	pr.On(`Get`, presenterID).Return(new(presenter.Presenter), nil)
+	classRepository := new(mockClass.Repository)
+	c := &class.Class{ID: classID}
+	classRepository.On(`GetClass`, classID).Return(c, nil)
+	s := &class.Session{ID: sessionID}
+	classRepository.On(`GetSession`, sessionID).Return(s, nil)
 
-	fr := new(mocksFeedbackRepository.Repository)
-	fr.On(`FetchPresenterFeedbacks`, presenterID, session, batch, year).Return(nil, errors.New(`Whoops!`))
+	presenterRepository := new(mockPresenter.Repository)
+	p := &presenter.Presenter{ID: presenterID}
+	presenterRepository.On(`GetPresenter`, presenterID).Return(p, nil)
 
-	fcr := new(mocksFacilitatorRepository.Repository)
-	u := usecase.NewReportUsecase(pr, fcr, fr)
+	facilitatorRepository := new(mockFacil.Repository)
+	feedbackRepository := new(mockFeedback.Repository)
+	feedbackRepository.On(`FetchPresenterFeedbacks`, presenterID, c, s).Return(nil, errors.New(`Whoops`))
 
-	report, err := u.GeneratePresenterReport(presenterID, session, batch, year)
-	assert.EqualError(t, errors.New(`Whoops!`), err.Error())
-	assert.Nil(t, report)
-
-	pr.AssertCalled(t, `Get`, presenterID)
-	fr.AssertCalled(t, `FetchPresenterFeedbacks`, presenterID, session, batch, year)
+	u := usecase.NewReportUsecase(classRepository, presenterRepository, facilitatorRepository, feedbackRepository)
+	_, err := u.GeneratePresenterReport(presenterID, classID, sessionID)
+	assert.Equal(t, `Whoops`, err.Error())
 }
 
-
+/*
 func TestGenerateFacilitatorReport(t *testing.T) {
 	facilitatorID := int64(1)
 	batch := int64(1)
