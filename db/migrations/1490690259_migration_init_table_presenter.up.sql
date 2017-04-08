@@ -1,4 +1,4 @@
-CREATE TABLE `jpcccol_db`.`presenter` (
+CREATE TABLE `presenter` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(100) DEFAULT NULL,
   `description` text,

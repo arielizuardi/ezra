@@ -1,1 +1,1 @@
-DROP TABLE `jpcccol_db`.`feedback_field`;
+DROP TABLE `feedback_field`;

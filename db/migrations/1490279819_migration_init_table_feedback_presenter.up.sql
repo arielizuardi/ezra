@@ -1,4 +1,4 @@
-CREATE TABLE `jpcccol_db`.`feedback_presenter` (
+CREATE TABLE `feedback_presenter` (
   `id` INT NOT NULL AUTO_INCREMENT COMMENT '',
   `class_id` VARCHAR(45) NOT NULL COMMENT '',
   `session_id` INT NOT NULL COMMENT '',

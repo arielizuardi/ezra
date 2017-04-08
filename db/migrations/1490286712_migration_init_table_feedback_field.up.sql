@@ -1,4 +1,4 @@
-CREATE TABLE `jpcccol_db`.`feedback_field` (
+CREATE TABLE `feedback_field` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
   `description` text,

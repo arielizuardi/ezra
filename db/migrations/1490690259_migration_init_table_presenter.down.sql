@@ -1,1 +1,1 @@
-DROP TABLE `jpcccol_db`.`presenter`;
+DROP TABLE `presenter`;

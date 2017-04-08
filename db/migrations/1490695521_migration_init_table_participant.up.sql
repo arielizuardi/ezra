@@ -1,4 +1,4 @@
-CREATE TABLE `jpcccol_db`.`participant` (
+CREATE TABLE `participant` (
   `email` varchar(200) NOT NULL DEFAULT '',
   `name` varchar(200) DEFAULT NULL,
   `dob` varchar(20) DEFAULT NULL,

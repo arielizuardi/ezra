@@ -1,4 +1,4 @@
-CREATE TABLE `jpcccol_db`.`class` (
+CREATE TABLE `class` (
   `id` varchar(50) NOT NULL DEFAULT '',
   `name` varchar(100) DEFAULT '',
   `batch` int(11) DEFAULT NULL,
