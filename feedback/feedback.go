@@ -35,7 +35,7 @@ type Field struct {
 	ID          int64       `json:"id"`
 	Name        string      `json:"name"`
 	Description string      `json:"description"`
-	Value       interface{} `json:"value"`
+	Value       interface{} `json:"-"`
 }
 
 // PresenterFeedback represents presenter feedback

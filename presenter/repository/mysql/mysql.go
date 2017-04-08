@@ -49,7 +49,7 @@ func (m *MySQLPresenterRepository) FetchAllPresenters() ([]*presenter.Presenter,
 	}
 
 	var presenters []*presenter.Presenter
-	if res.Next() {
+	for res.Next() {
 		p := new(presenter.Presenter)
 		err := res.Scan(&p.ID, &p.Name, &p.Description, &p.ProfilePicture)
 		if err != nil {

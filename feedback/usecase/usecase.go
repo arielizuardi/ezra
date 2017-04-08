@@ -36,7 +36,7 @@ type feedbackUsecase struct {
 }
 
 func (u *feedbackUsecase) FetchAllFeedbackFields() ([]*feedback.Field, error) {
-	return u.FetchAllFeedbackFields()
+	return u.FeedbackRepository.FetchAllFeedbackFields()
 }
 
 func (u *feedbackUsecase) StorePresenterFeedbackWithMapping(presenterID int64, classID string, sessionID int64, mappings []*Mapping, values [][]string) ([]*feedback.PresenterFeedback, error) {

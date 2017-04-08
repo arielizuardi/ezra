@@ -47,7 +47,7 @@ func (m *MySQLClassRepository) FetchAllClasses() ([]*class.Class, error) {
 	}
 
 	var classes []*class.Class
-	if res.Next() {
+	for res.Next() {
 		c := new(class.Class)
 		err := res.Scan(&c.ID, &c.Name, &c.Batch, &c.Year)
 		if err != nil {
