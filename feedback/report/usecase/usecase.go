@@ -1,9 +1,9 @@
 package usecase
 
-/*
 import (
+	"github.com/arielizuardi/ezra/class"
+	classRepository "github.com/arielizuardi/ezra/class/repository"
 	"github.com/arielizuardi/ezra/facilitator"
-	"github.com/arielizuardi/ezra/feedback"
 	"github.com/arielizuardi/ezra/feedback/report"
 	"github.com/arielizuardi/ezra/feedback/repository"
 	"github.com/arielizuardi/ezra/presenter"
@@ -14,17 +14,18 @@ import (
 
 // ReportUsecase defines report usecase
 type ReportUsecase interface {
-	GenerateFacilitatorReport(facilitatorID int64, batch int64, year int64) (*report.FacilitatorReport, error)
-	GeneratePresenterReport(presenterID int64, session int64, batch int64, year int64) (*report.PresenterReport, error)
+	GenerateFacilitatorReport(facilitatorID int64, c *class.Class) (*report.FacilitatorReport, error)
+	GeneratePresenterReport(presenterID int64, classID string, sessionID int64) (*report.PresenterReport, error)
 }
 
 type reportUsecase struct {
+	ClassRepository       classRepository.Repository
 	PresenterRepository   presenterRepository.Repository
 	FacilitatorRepository facilRepository.Repository
 	FeedbackRepository    repository.Repository
 }
 
-func (r *reportUsecase) GenerateFacilitatorReport(facilitatorID int64, batch int64, year int64) (*report.FacilitatorReport, error) {
+func (r *reportUsecase) GenerateFacilitatorReport(facilitatorID int64, c *class.Class) (*report.FacilitatorReport, error) {
 
 	facil, err := r.FacilitatorRepository.Get(facilitatorID)
 	if err != nil {
@@ -38,56 +39,82 @@ func (r *reportUsecase) GenerateFacilitatorReport(facilitatorID int64, batch int
 	facilitatorReport := new(report.FacilitatorReport)
 	facilitatorReport.Facilitator = facil
 
-	batchFeedbackFacilitator, err := r.FeedbackRepository.GetBatchFeedbackFacilitator(facilitatorID, batch, year)
+	facilitatorFeedbacks, err := r.FeedbackRepository.FetchFacilitatorFeedbacks(facilitatorID, c)
 	if err != nil {
 		return nil, err
 	}
 
-	sum := make(map[string]int64)
-	ct := make(map[string]int64)
-	avg := make(map[string]float64)
+	// sum := make(map[string]int64)
+	// ct := make(map[string]int64)
+	// avg := make(map[string]float64)
 
-	for _, facilitatorFeedback := range batchFeedbackFacilitator.BagOfFeedback {
-		for _, rating := range facilitatorFeedback.Ratings {
-			_, ok := sum[rating.Key]
-			if !ok {
-				sum[rating.Key] = 0
+	for _, facilitatorFeedback := range facilitatorFeedbacks {
+		for _, f := range facilitatorFeedback.Fields {
+			switch f.ID {
+			// TODO
 			}
-
-			_, ok2 := ct[rating.Key]
-			if !ok2 {
-				ct[rating.Key] = 0
-			}
-
-			sum[rating.Key] = sum[rating.Key] + rating.Score
-			ct[rating.Key]++
 		}
 	}
 
-	var sumAvg float64
+	// for _, facilitatorFeedback := range batchFeedbackFacilitator.BagOfFeedback {
+	// 	for _, rating := range facilitatorFeedback.Ratings {
+	// 		_, ok := sum[rating.Key]
+	// 		if !ok {
+	// 			sum[rating.Key] = 0
+	// 		}
+	//
+	// 		_, ok2 := ct[rating.Key]
+	// 		if !ok2 {
+	// 			ct[rating.Key] = 0
+	// 		}
+	//
+	// 		sum[rating.Key] = sum[rating.Key] + rating.Score
+	// 		ct[rating.Key]++
+	// 	}
+	// }
+	//
+	// var sumAvg float64
+	//
+	// ctKey := 0
+	// for _, key := range feedback.FacilitatorRatingKey {
+	// 	_, ok3 := sum[key]
+	// 	if ok3 {
+	// 		avg[key] = float64(sum[key]) / float64(ct[key])
+	// 		sumAvg = sumAvg + avg[key]
+	// 		ctKey++
+	// 	}
+	// }
 
-	ctKey := 0
-	for _, key := range feedback.FacilitatorRatingKey {
-		_, ok3 := sum[key]
-		if ok3 {
-			avg[key] = float64(sum[key]) / float64(ct[key])
-			sumAvg = sumAvg + avg[key]
-			ctKey++
-		}
-	}
-
-	facilitatorReport.AvgFields = avg
-
-	if ctKey > 0 {
-		facilitatorReport.OverallAvg = sumAvg / float64(ctKey)
-	}
+	// facilitatorReport.AvgFields = avg
+	//
+	// if ctKey > 0 {
+	// 	facilitatorReport.OverallAvg = sumAvg / float64(ctKey)
+	// }
 
 	return facilitatorReport, nil
 }
 
-func (r *reportUsecase) GeneratePresenterReport(presenterID int64, session int64, batch int64, year int64) (*report.PresenterReport, error) {
+func (r *reportUsecase) GeneratePresenterReport(presenterID int64, classID string, sessionID int64) (*report.PresenterReport, error) {
 
-	p, err := r.PresenterRepository.Get(presenterID)
+	c, err := r.ClassRepository.GetClass(classID)
+	if err != nil {
+		return nil, err
+	}
+
+	if c == nil {
+		return nil, class.ErrClassNotFound
+	}
+
+	s, err := r.ClassRepository.GetSession(sessionID)
+	if err != nil {
+		return nil, err
+	}
+
+	if s == nil {
+		return nil, class.ErrSessionNotFound
+	}
+
+	p, err := r.PresenterRepository.GetPresenter(presenterID)
 	if err != nil {
 		return nil, err
 	}
@@ -98,38 +125,45 @@ func (r *reportUsecase) GeneratePresenterReport(presenterID int64, session int64
 
 	presenterReport := new(report.PresenterReport)
 	presenterReport.Presenter = p
+	presenterReport.Class = c
 
-	presenterFeedbacks, err := r.FeedbackRepository.FetchPresenterFeedbacks(presenterID, session, batch, year)
+	presenterFeedbacks, err := r.FeedbackRepository.FetchPresenterFeedbacks(presenterID, c, s)
 	if err != nil {
 		return nil, err
 	}
 
 	sum := make(map[string]int64)
 	ct := make(map[string]int64)
-	avg := make(map[string]float64)
 
 	for _, presenterFeedback := range presenterFeedbacks {
-		for _, rating := range presenterFeedback.Ratings {
-			_, ok := sum[rating.Key]
-			if !ok {
-				sum[rating.Key] = 0
+		for _, f := range presenterFeedback.Fields {
+			switch f.ID {
+			case 4, 5, 6, 7, 8: // Penguasaan materi, Sistematika Penyajian, Gaya atau metode penyajian, Gaya atau metode penyajian, Pengaturan Waktu, Penggunaan alat bantu
+				if f.Value != nil {
+					sum[f.Name] += f.Value.(int64)
+					ct[f.Name]++
+				}
+			// case 5: // Sistematika Penyajian
+			// case 6: // Gaya atau metode penyajian
+			// case 7: // Pengaturan Waktu
+			// case 8: // Penggunaan alat bantu
+			default:
 			}
-
-			_, ok2 := ct[rating.Key]
-			if !ok2 {
-				ct[rating.Key] = 0
-			}
-
-			sum[rating.Key] = sum[rating.Key] + rating.Score
-			ct[rating.Key]++
 		}
 	}
 
-	ctKey := 0
+	var keys []string
+	for k := range sum {
+		keys = append(keys, k)
+	}
+
 	var sumAvg float64
-	for _, key := range feedback.PresenterRatingKey {
-		_, ok3 := sum[key]
-		if ok3 {
+	ctKey := 0
+	avg := make(map[string]float64)
+
+	for _, key := range keys {
+		_, ok := sum[key]
+		if ok {
 			avg[key] = float64(sum[key]) / float64(ct[key])
 			sumAvg = sumAvg + avg[key]
 			ctKey++
@@ -147,14 +181,15 @@ func (r *reportUsecase) GeneratePresenterReport(presenterID int64, session int64
 
 // NewReportUsecase returns new instance of ReportUsecase
 func NewReportUsecase(
+	classRepository classRepository.Repository,
 	presenterRepository presenterRepository.Repository,
 	facilitatorRepository facilRepository.Repository,
 	feedbackRepository repository.Repository) ReportUsecase {
 
 	return &reportUsecase{
+		ClassRepository:       classRepository,
 		PresenterRepository:   presenterRepository,
 		FacilitatorRepository: facilitatorRepository,
 		FeedbackRepository:    feedbackRepository,
 	}
 }
-*/

@@ -59,6 +59,10 @@ func (m *MySQLClassRepository) FetchAllClasses() ([]*class.Class, error) {
 	return classes, nil
 }
 
+func (m *MySQLClassRepository) GetSession(sessionID int64) (*class.Session, error) {
+	return nil, nil
+}
+
 func NewMySQLClassRepository(dbConn *sql.DB) *MySQLClassRepository {
 	return &MySQLClassRepository{DBConn: dbConn}
 }

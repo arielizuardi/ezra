@@ -1,5 +1,7 @@
 package class
 
+import "errors"
+
 const (
 	// COB const for Community of Believers
 	COB = `COB`
@@ -7,6 +9,11 @@ const (
 	COL = `COL`
 	// COC const for Community of Councellors
 	COC = `COC`
+)
+
+var (
+	ErrClassNotFound   = errors.New(`Class not found`)
+	ErrSessionNotFound = errors.New(`Session not found`)
 )
 
 // Class represents class
