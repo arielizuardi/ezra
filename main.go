@@ -20,6 +20,12 @@ import (
 
 	feedbackhttp "github.com/arielizuardi/ezra/feedback/http"
 
+	classhttp "github.com/arielizuardi/ezra/class/http"
+	classusecase "github.com/arielizuardi/ezra/class/usecase"
+
+	presenterhttp "github.com/arielizuardi/ezra/presenter/http"
+	presenterusecase "github.com/arielizuardi/ezra/presenter/usecase"
+
 	"github.com/labstack/echo"
 )
 
@@ -65,8 +71,14 @@ func main() {
 	participantRepository := participantrepo.NewMySQLParticipantRepository(dbConn)
 	feedbackRepository := feedbackrepo.NewMySQLFeedbackRepository(dbConn)
 
+	classUsecase := classusecase.NewClassUsecase(classRepository)
+	classhttp.Init(e, classUsecase)
+
 	feedbackUsecase := feedbackusecase.NewFeedbackUsecase(classRepository, presenterRepository, facilitatorRepository, participantRepository, feedbackRepository)
 	feedbackhttp.Init(e, feedbackUsecase)
+
+	presenterUsecase := presenterusecase.NewPresenterUsecase(presenterRepository)
+	presenterhttp.Init(e, presenterUsecase)
 
 	address := config.GetString(`server.address`)
 	logrus.Infof(`Ezra server running at address : %v`, address)

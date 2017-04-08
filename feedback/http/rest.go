@@ -45,8 +45,18 @@ func (f *FeedbackHTTPHandler) HandleStorePresenterFeedbackFromGsheet(c echo.Cont
 	return c.NoContent(http.StatusCreated)
 }
 
+func (f *FeedbackHTTPHandler) HandleFetchAllFeedbackFields(c echo.Context) error {
+	feedbackFields, err := f.FeedbackUsecase.FetchAllFeedbackFields()
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, &ResponseError{err.Error()})
+	}
+
+	return c.JSON(http.StatusOK, feedbackFields)
+}
+
 // Init ...
 func Init(e *echo.Echo, feedbackUsecase feedbackusecase.FeedbackUsecase) {
 	h := &FeedbackHTTPHandler{feedbackUsecase}
+	e.GET(`/feedback/field`, h.HandleFetchAllFeedbackFields)
 	e.POST(`/presenter/:id/feedbackmapping`, h.HandleStorePresenterFeedbackFromGsheet)
 }
