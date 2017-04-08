@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"strconv"
+	"strings"
 	"time"
 
 	c "github.com/arielizuardi/ezra/class/repository"
@@ -125,7 +126,7 @@ func (u *feedbackUsecase) findOrCreateParticipant(name string) (*participant.Par
 		email := strconv.Itoa(int(unixnano)) + `@noemail.com`
 		newParticipant := new(participant.Participant)
 		newParticipant.Email = email
-		newParticipant.Name = name
+		newParticipant.Name = strings.Title(name)
 
 		err := u.ParticipantRepository.StoreParticipant(newParticipant)
 		if err != nil {
