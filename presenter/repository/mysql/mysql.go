@@ -2,7 +2,6 @@ package mysql
 
 import (
 	"database/sql"
-	"fmt"
 	"time"
 
 	"github.com/arielizuardi/ezra/presenter"
@@ -18,7 +17,6 @@ func (m *MySQLPresenterRepository) GetPresenter(presenterID int64) (*presenter.P
 	p := new(presenter.Presenter)
 	err := row.Scan(&p.ID, &p.Name, &p.Description, &p.ProfilePicture)
 	if err != nil {
-		fmt.Printf(`%v`, err)
 		return nil, err
 	}
 

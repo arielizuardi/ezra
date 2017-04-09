@@ -16,9 +16,9 @@ type FacilitatorReport struct {
 }
 
 type PresenterReport struct {
-	Class      *class.Class
-	Presenter  *presenter.Presenter
-	AvgFields  map[string]float64
-	OverallAvg float64
-	Comment    string
+	Class      *class.Class         `json:"class"`
+	Presenter  *presenter.Presenter `json:"presenter"`
+	AvgFields  map[string]float64   `json:"avg_fields"`
+	OverallAvg float64              `json:"overall_avg"`
+	Comment    string               `json:"comment"`
 }

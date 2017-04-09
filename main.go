@@ -20,6 +20,9 @@ import (
 
 	feedbackhttp "github.com/arielizuardi/ezra/feedback/http"
 
+	reporthttp "github.com/arielizuardi/ezra/feedback/report/http"
+	reportusecase "github.com/arielizuardi/ezra/feedback/report/usecase"
+
 	classhttp "github.com/arielizuardi/ezra/class/http"
 	classusecase "github.com/arielizuardi/ezra/class/usecase"
 
@@ -80,6 +83,13 @@ func main() {
 
 	presenterUsecase := presenterusecase.NewPresenterUsecase(presenterRepository)
 	presenterhttp.Init(e, presenterUsecase)
+
+	// classRepository classRepository.Repository,
+	// presenterRepository presenterRepository.Repository,
+	// facilitatorRepository facilRepository.Repository,
+	// feedbackRepository repository.Repository
+	reportUsecase := reportusecase.NewReportUsecase(classRepository, presenterRepository, facilitatorRepository, feedbackRepository)
+	reporthttp.Init(e, reportUsecase)
 
 	e.Use(middleware.CORS())
 

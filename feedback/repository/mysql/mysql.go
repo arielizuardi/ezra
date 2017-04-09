@@ -43,7 +43,41 @@ func (m *MySQLFeedbackRepository) FetchFacilitatorFeedbacks(facilitatorID int64,
 
 // FetchPresenterFeedbacks ...
 func (m *MySQLFeedbackRepository) FetchPresenterFeedbacks(presenterID int64, c *class.Class, s *class.Session) ([]*feedback.PresenterFeedback, error) {
-	return nil, nil
+
+	res, err := m.DBConn.Query(`SELECT fields FROM feedback_presenter WHERE presenter_id = ? AND class_id = ? AND session_id = ?`, presenterID, c.ID, s.ID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
+
+		return nil, err
+	}
+
+	var feedbackPresenters []*feedback.PresenterFeedback
+
+	for res.Next() {
+		var strFields string
+
+		pf := new(feedback.PresenterFeedback)
+		pf.Class = c
+		pf.Session = s
+		err := res.Scan(&strFields)
+		if err != nil {
+			return nil, err
+		}
+
+		var fields []*feedback.Field
+
+		if err := json.Unmarshal([]byte(strFields), &fields); err != nil {
+			return nil, err
+		}
+
+		pf.Fields = fields
+
+		feedbackPresenters = append(feedbackPresenters, pf)
+	}
+
+	return feedbackPresenters, nil
 }
 
 // StorePresenterFeedbacks ...
