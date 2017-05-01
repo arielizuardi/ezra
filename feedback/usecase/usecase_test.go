@@ -37,6 +37,7 @@ func TestStorePresenterFeedbackWithMapping(t *testing.T) {
 
 	mockClassRepo := new(c.Repository)
 	mockClassRepo.On(`GetClass`, classID).Return(&class.Class{ID: `COL-B2-2016`}, nil)
+	mockClassRepo.On(`GetSession`, sessionID).Return(&class.Session{ID: sessionID}, nil)
 
 	mockPresenterRepo := new(prt.Repository)
 	mockPresenterRepo.On(`GetPresenter`, presenterID).Return(&presenter.Presenter{Name: `Juferson Mangempis`}, nil)
@@ -160,6 +161,7 @@ func TestStorePresenterFeedbackWithMappingAndGetErrorFromPresenter(t *testing.T)
 
 	mockClassRepo := new(c.Repository)
 	mockClassRepo.On(`GetClass`, classID).Return(&class.Class{}, nil)
+	mockClassRepo.On(`GetSession`, sessionID).Return(&class.Session{ID: sessionID}, nil)
 
 	mockPresenterRepo := new(prt.Repository)
 	mockPresenterRepo.On(`GetPresenter`, presenterID).Return(nil, errors.New(`Whoops!`))
@@ -214,6 +216,7 @@ func TestStorePresenterFeedbackWithMappingAndGetErrorFromParticipant(t *testing.
 
 	mockClassRepo := new(c.Repository)
 	mockClassRepo.On(`GetClass`, classID).Return(&class.Class{}, nil)
+	mockClassRepo.On(`GetSession`, sessionID).Return(&class.Session{ID: sessionID}, nil)
 
 	mockPresenterRepo := new(prt.Repository)
 	mockPresenterRepo.On(`GetPresenter`, presenterID).Return(&presenter.Presenter{}, nil)
@@ -268,6 +271,7 @@ func TestStorePresenterFeedbackWithMappingAndGetErrorWhenStoreParticipant(t *tes
 
 	mockClassRepo := new(c.Repository)
 	mockClassRepo.On(`GetClass`, classID).Return(&class.Class{}, nil)
+	mockClassRepo.On(`GetSession`, sessionID).Return(&class.Session{ID: sessionID}, nil)
 
 	mockPresenterRepo := new(prt.Repository)
 	mockPresenterRepo.On(`GetPresenter`, presenterID).Return(&presenter.Presenter{}, nil)
@@ -322,6 +326,7 @@ func TestStorePresenterFeedbackWithMappingAndGetErrorWhenStoreFeedbacks(t *testi
 
 	mockClassRepo := new(c.Repository)
 	mockClassRepo.On(`GetClass`, classID).Return(&class.Class{ID: `COL-B2-2016`}, nil)
+	mockClassRepo.On(`GetSession`, sessionID).Return(&class.Session{ID: sessionID}, nil)
 
 	mockPresenterRepo := new(prt.Repository)
 	mockPresenterRepo.On(`GetPresenter`, presenterID).Return(&presenter.Presenter{Name: `Juferson Mangempis`}, nil)

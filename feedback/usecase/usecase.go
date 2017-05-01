@@ -6,6 +6,7 @@ import (
 	"time"
 
 	c "github.com/arielizuardi/ezra/class/repository"
+	"github.com/arielizuardi/ezra/facilitator"
 	fcl "github.com/arielizuardi/ezra/facilitator/repository"
 	"github.com/arielizuardi/ezra/feedback"
 	f "github.com/arielizuardi/ezra/feedback/repository"
@@ -26,6 +27,7 @@ type Mapping struct {
 type FeedbackUsecase interface {
 	FetchAllFeedbackFields() ([]*feedback.Field, error)
 	StorePresenterFeedbackWithMapping(presenterID int64, classID string, sessionID int64, mappings []*Mapping, values [][]string) ([]*feedback.PresenterFeedback, error)
+	StoreFacilitatorFeedbackWithMapping(classID string, mappings []*Mapping, values [][]string) ([]*feedback.FacilitatorFeedback, error)
 }
 
 type feedbackUsecase struct {
@@ -137,6 +139,37 @@ func (u *feedbackUsecase) findOrCreateParticipant(name string) (*participant.Par
 	}
 
 	return p, nil
+}
+
+func (u *feedbackUsecase) StoreFacilitatorFeedbackWithMapping(classID string, mappings []*Mapping, values [][]string) ([]*feedback.FacilitatorFeedback, error) {
+	// class, err := u.ClassRepository.GetClass(classID)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	//
+	// var facilitatorFeedbacks []*feedback.FacilitatorFeedback
+	// for _, value := range values {
+	// 	ff := new(feedback.FacilitatorFeedback)
+	// 	ff.Class = class
+	// 	ff.Facilitator = nil
+	// 	ff.Participant = nil
+	// 	ff.Fields = nil
+	// }
+
+	return nil, nil
+}
+
+func (u *feedbackUsecase) findOrCreateFacilitator(name string) (*facilitator.Facilitator, error) {
+	f, err := u.FacilitatorRepository.GetFacilitatorByName(name)
+	if err != nil {
+		return nil, err
+	}
+
+	if f == nil {
+
+	}
+
+	return f, nil
 }
 
 func NewFeedbackUsecase(

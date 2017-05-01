@@ -33,6 +33,29 @@ func (_m *FeedbackUsecase) FetchAllFeedbackFields() ([]*feedback.Field, error) {
 	return r0, r1
 }
 
+// StoreFacilitatorFeedbackWithMapping provides a mock function with given fields: classID, mappings, values
+func (_m *FeedbackUsecase) StoreFacilitatorFeedbackWithMapping(classID string, mappings []*usecase.Mapping, values [][]string) ([]*feedback.FacilitatorFeedback, error) {
+	ret := _m.Called(classID, mappings, values)
+
+	var r0 []*feedback.FacilitatorFeedback
+	if rf, ok := ret.Get(0).(func(string, []*usecase.Mapping, [][]string) []*feedback.FacilitatorFeedback); ok {
+		r0 = rf(classID, mappings, values)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]*feedback.FacilitatorFeedback)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(string, []*usecase.Mapping, [][]string) error); ok {
+		r1 = rf(classID, mappings, values)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // StorePresenterFeedbackWithMapping provides a mock function with given fields: presenterID, classID, sessionID, mappings, values
 func (_m *FeedbackUsecase) StorePresenterFeedbackWithMapping(presenterID int64, classID string, sessionID int64, mappings []*usecase.Mapping, values [][]string) ([]*feedback.PresenterFeedback, error) {
 	ret := _m.Called(presenterID, classID, sessionID, mappings, values)

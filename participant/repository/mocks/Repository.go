@@ -9,13 +9,13 @@ type Repository struct {
 	mock.Mock
 }
 
-// GetParticipant provides a mock function with given fields: participantID
-func (_m *Repository) GetParticipant(participantID int64) (*participant.Participant, error) {
-	ret := _m.Called(participantID)
+// GetParticipant provides a mock function with given fields: email
+func (_m *Repository) GetParticipant(email string) (*participant.Participant, error) {
+	ret := _m.Called(email)
 
 	var r0 *participant.Participant
-	if rf, ok := ret.Get(0).(func(int64) *participant.Participant); ok {
-		r0 = rf(participantID)
+	if rf, ok := ret.Get(0).(func(string) *participant.Participant); ok {
+		r0 = rf(email)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*participant.Participant)
@@ -23,8 +23,8 @@ func (_m *Repository) GetParticipant(participantID int64) (*participant.Particip
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(int64) error); ok {
-		r1 = rf(participantID)
+	if rf, ok := ret.Get(1).(func(string) error); ok {
+		r1 = rf(email)
 	} else {
 		r1 = ret.Error(1)
 	}

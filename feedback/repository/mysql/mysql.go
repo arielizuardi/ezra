@@ -118,6 +118,43 @@ func (m *MySQLFeedbackRepository) StorePresenterFeedbacks(feedbacks []*feedback.
 	return nil
 }
 
+func (m *MySQLFeedbackRepository) StoreFacilitatorFeedbacks(feedbacks []*feedback.FacilitatorFeedback) error {
+	// `fields` should be in JSON format
+	feedbackQuery := `INSERT INTO feedback_facilitator (class_id, facilitator_id, participant_email, fields, created_at, updated_at) ` +
+		` VALUES (?, ?, ?, ?, ?, ?)`
+
+	trx, err := m.DBConn.Begin()
+	if err != nil {
+		return err
+	}
+
+	feedbackStmt, err := trx.Prepare(feedbackQuery)
+	if err != nil {
+		return err
+	}
+
+	defer feedbackStmt.Close()
+
+	for _, fd := range feedbacks {
+		byteFields, err := json.Marshal(fd.Fields)
+		if err != nil {
+			trx.Rollback()
+			return err
+		}
+
+		now := time.Now()
+		_, err = feedbackStmt.Exec(fd.Class.ID, fd.Facilitator.ID, fd.Participant.Email, string(byteFields), now, now)
+		if err != nil {
+			trx.Rollback()
+			return err
+		}
+	}
+
+	trx.Commit()
+
+	return nil
+}
+
 func NewMySQLFeedbackRepository(dbConn *sql.DB) *MySQLFeedbackRepository {
 	return &MySQLFeedbackRepository{DBConn: dbConn}
 }

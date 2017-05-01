@@ -31,3 +31,40 @@ func (_m *Repository) GetFacilitator(facilitatorID int64) (*facilitator.Facilita
 
 	return r0, r1
 }
+
+// GetFacilitatorByName provides a mock function with given fields: name
+func (_m *Repository) GetFacilitatorByName(name string) (*facilitator.Facilitator, error) {
+	ret := _m.Called(name)
+
+	var r0 *facilitator.Facilitator
+	if rf, ok := ret.Get(0).(func(string) *facilitator.Facilitator); ok {
+		r0 = rf(name)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*facilitator.Facilitator)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(string) error); ok {
+		r1 = rf(name)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// StoreFacilitator provides a mock function with given fields: f
+func (_m *Repository) StoreFacilitator(f *facilitator.Facilitator) error {
+	ret := _m.Called(f)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(*facilitator.Facilitator) error); ok {
+		r0 = rf(f)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}

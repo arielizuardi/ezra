@@ -5,6 +5,7 @@ import (
 
 	"github.com/arielizuardi/ezra/class"
 	"github.com/arielizuardi/ezra/db"
+	"github.com/arielizuardi/ezra/facilitator"
 	"github.com/arielizuardi/ezra/feedback"
 	"github.com/arielizuardi/ezra/participant"
 	"github.com/arielizuardi/ezra/presenter"
@@ -96,6 +97,32 @@ func (s *MySQLTest) TestStore() {
 
 	feedbacks := []*feedback.PresenterFeedback{f}
 	err := m.StorePresenterFeedbacks(feedbacks)
+	assert.NoError(s.T(), err)
+}
+
+func (s *MySQLTest) TestStoreFacilitatorFeedbacks() {
+	m := &mysql.MySQLFeedbackRepository{s.DBConn}
+	f := new(feedback.FacilitatorFeedback)
+	c := new(class.Class)
+	c.ID = `col-b2-2016`
+	f.Class = c
+
+	f.Facilitator = &facilitator.Facilitator{ID: int64(123)}
+	f.Participant = &participant.Participant{Email: `participant@fav.com`}
+
+	f1 := new(feedback.Field)
+	f1.ID = int64(1)
+	f1.Value = 3.0
+
+	f2 := new(feedback.Field)
+	f2.ID = int64(2)
+	f2.Value = `Keren!`
+
+	fields := []*feedback.Field{f1, f2}
+	f.Fields = fields
+
+	feedbacks := []*feedback.FacilitatorFeedback{f}
+	err := m.StoreFacilitatorFeedbacks(feedbacks)
 	assert.NoError(s.T(), err)
 }
 

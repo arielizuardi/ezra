@@ -16,7 +16,7 @@ type MySQLTest struct {
 
 func TestMySQLSuite(t *testing.T) {
 	if testing.Short() {
-		t.Skip("Skip feedback repository test")
+		t.Skip("Skip participant repository test")
 	}
 
 	suite.Run(t, new(MySQLTest))

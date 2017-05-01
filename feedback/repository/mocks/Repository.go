@@ -79,6 +79,20 @@ func (_m *Repository) FetchPresenterFeedbacks(presenterID int64, c *class.Class,
 	return r0, r1
 }
 
+// StoreFacilitatorFeedbacks provides a mock function with given fields: feedbacks
+func (_m *Repository) StoreFacilitatorFeedbacks(feedbacks []*feedback.FacilitatorFeedback) error {
+	ret := _m.Called(feedbacks)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func([]*feedback.FacilitatorFeedback) error); ok {
+		r0 = rf(feedbacks)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // StorePresenterFeedbacks provides a mock function with given fields: feedbacks
 func (_m *Repository) StorePresenterFeedbacks(feedbacks []*feedback.PresenterFeedback) error {
 	ret := _m.Called(feedbacks)

@@ -34,12 +34,14 @@ func TestGeneratePresenterReport(t *testing.T) {
 
 	feedbackRepository := new(mockFeedback.Repository)
 
-	field1 := &feedback.Field{ID: int64(4), Name: `Penguasaan materi`, Value: int64(2)}
-	field2 := &feedback.Field{ID: int64(5), Name: `Sistematika Penyajian`, Value: int64(3)}
-	field3 := &feedback.Field{ID: int64(6), Name: `Gaya atau metode penyajian`, Value: int64(4)}
-	field4 := &feedback.Field{ID: int64(7), Name: `Pengaturan Waktu`, Value: int64(3)}
-	field5 := &feedback.Field{ID: int64(8), Name: `Penggunaan alat bantu`, Value: int64(4)}
+	field1 := &feedback.Field{ID: int64(4), Name: `Penguasaan materi`, Value: `2`}
+	field2 := &feedback.Field{ID: int64(5), Name: `Sistematika Penyajian`, Value: `3`}
+	field3 := &feedback.Field{ID: int64(6), Name: `Gaya atau metode penyajian`, Value: `4`}
+	field4 := &feedback.Field{ID: int64(7), Name: `Pengaturan Waktu`, Value: `3`}
+	field5 := &feedback.Field{ID: int64(8), Name: `Penggunaan alat bantu`, Value: `4`}
 	field6 := &feedback.Field{ID: int64(12), Name: `Another Filed`, Value: `Should not be count`}
+
+	feedbackRepository.On("FetchAllFeedbackFields").Return([]*feedback.Field{field1, field2, field3, field4, field5, field6}, nil)
 
 	p1 := &feedback.PresenterFeedback{Class: c, Session: s, Presenter: p, Fields: []*feedback.Field{field1, field2, field3, field4, field5, field6}}
 	p2 := &feedback.PresenterFeedback{Class: c, Session: s, Presenter: p, Fields: []*feedback.Field{field1, field2, field3, field4, field5, field6}}

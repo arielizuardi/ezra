@@ -10,5 +10,6 @@ type Repository interface {
 	FetchFacilitatorFeedbacks(facilitatorID int64, c *class.Class) ([]*feedback.FacilitatorFeedback, error)
 	FetchPresenterFeedbacks(presenterID int64, c *class.Class, s *class.Session) ([]*feedback.PresenterFeedback, error)
 	StorePresenterFeedbacks(feedbacks []*feedback.PresenterFeedback) error
+	StoreFacilitatorFeedbacks(feedbacks []*feedback.FacilitatorFeedback) error
 	FetchAllFeedbackFields() ([]*feedback.Field, error)
 }
