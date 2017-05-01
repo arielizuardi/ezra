@@ -26,6 +26,13 @@ type PresenterFeedbackRequest struct {
 	Values      [][]string                 `json:"values" validate:"required"`
 }
 
+// FacilitatorFeedbackRequest ...
+type FacilitatorFeedbackRequest struct {
+	ClassID  string                     `json:"class_id" validate:"required"`
+	Mappings []*feedbackusecase.Mapping `json:"mappings" validate:"required"`
+	Values   [][]string                 `json:"values" validate:"required"`
+}
+
 func (f *FeedbackHTTPHandler) HandleStorePresenterFeedbackFromGsheet(c echo.Context) error {
 	// TODO rest_test and change the way to generate report
 	pf := new(PresenterFeedbackRequest)
@@ -39,6 +46,24 @@ func (f *FeedbackHTTPHandler) HandleStorePresenterFeedbackFromGsheet(c echo.Cont
 	}
 
 	if _, err := f.FeedbackUsecase.StorePresenterFeedbackWithMapping(pf.PresenterID, pf.ClassID, pf.SessionID, pf.Mappings, pf.Values); err != nil {
+		return c.JSON(http.StatusInternalServerError, &ResponseError{err.Error()})
+	}
+
+	return c.NoContent(http.StatusCreated)
+}
+
+func (f *FeedbackHTTPHandler) HandleStoreFacilitatorFeedbackFromGsheet(c echo.Context) error {
+	ff := new(FacilitatorFeedbackRequest)
+	if err := c.Bind(&ff); err != nil {
+		return c.JSON(http.StatusUnprocessableEntity, &ResponseError{err.Error()})
+	}
+
+	vld := validator.NewRequestValidator()
+	if err := vld.Validate(ff); err != nil {
+		return c.JSON(http.StatusBadRequest, &ResponseError{err.Error()})
+	}
+
+	if _, err := f.FeedbackUsecase.StoreFacilitatorFeedbackWithMapping(ff.ClassID, ff.Mappings, ff.Values); err != nil {
 		return c.JSON(http.StatusInternalServerError, &ResponseError{err.Error()})
 	}
 
@@ -59,4 +84,5 @@ func Init(e *echo.Echo, feedbackUsecase feedbackusecase.FeedbackUsecase) {
 	h := &FeedbackHTTPHandler{feedbackUsecase}
 	e.GET(`/feedback/field`, h.HandleFetchAllFeedbackFields)
 	e.POST(`/exportfeedback`, h.HandleStorePresenterFeedbackFromGsheet)
+	e.POST(`/exportfacilitatorfeedback`, h.HandleStoreFacilitatorFeedbackFromGsheet)
 }

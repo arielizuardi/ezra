@@ -16,6 +16,7 @@ import (
 )
 
 var (
+	FacilitatorNameFieldID = 5 //depends on file
 	ParticipantNameFieldID = 2
 )
 
@@ -87,6 +88,28 @@ func (u *feedbackUsecase) StorePresenterFeedbackWithMapping(presenterID int64, c
 	return presenterFeedbacks, nil
 }
 
+func (u *feedbackUsecase) ConvertToFacilitator(mappings []*Mapping, value []string) (*facilitator.Facilitator, error) {
+	var facil *facilitator.Facilitator
+	var err error
+
+	// now we loop every column in value, find the match mapping then store to fields
+	for headeridx, v := range value {
+		for _, mapping := range mappings {
+			mappingHeaderID := int(mapping.HeaderID)
+			mappingFieldID := int(mapping.FieldID)
+
+			if headeridx == mappingHeaderID && mappingFieldID == FacilitatorNameFieldID {
+				facil, err = u.findOrCreateFacilitator(v)
+				if err != nil {
+					return nil, err
+				}
+			}
+		}
+	}
+
+	return facil, nil
+}
+
 func (u *feedbackUsecase) ConvertToParticipantAndFields(mappings []*Mapping, value []string) (*participant.Participant, []*feedback.Field, error) {
 
 	var fields []*feedback.Field
@@ -142,21 +165,41 @@ func (u *feedbackUsecase) findOrCreateParticipant(name string) (*participant.Par
 }
 
 func (u *feedbackUsecase) StoreFacilitatorFeedbackWithMapping(classID string, mappings []*Mapping, values [][]string) ([]*feedback.FacilitatorFeedback, error) {
-	// class, err := u.ClassRepository.GetClass(classID)
-	// if err != nil {
-	// 	return nil, err
-	// }
-	//
-	// var facilitatorFeedbacks []*feedback.FacilitatorFeedback
-	// for _, value := range values {
-	// 	ff := new(feedback.FacilitatorFeedback)
-	// 	ff.Class = class
-	// 	ff.Facilitator = nil
-	// 	ff.Participant = nil
-	// 	ff.Fields = nil
-	// }
+	class, err := u.ClassRepository.GetClass(classID)
+	if err != nil {
+		return nil, err
+	}
 
-	return nil, nil
+	var facilitatorFeedbacks []*feedback.FacilitatorFeedback
+	for _, value := range values {
+		ff := new(feedback.FacilitatorFeedback)
+		ff.Class = class
+
+		facil, err := u.ConvertToFacilitator(mappings, value)
+		if err != nil {
+			return nil, err
+		}
+
+		ff.Facilitator = facil
+
+		ptc, fields, err := u.ConvertToParticipantAndFields(mappings, value)
+		if err != nil {
+			return nil, err
+		}
+
+		ff.Participant = ptc
+		ff.Fields = fields
+
+		facilitatorFeedbacks = append(facilitatorFeedbacks, ff)
+	}
+
+	if len(facilitatorFeedbacks) > 0 {
+		if err := u.FeedbackRepository.StoreFacilitatorFeedbacks(facilitatorFeedbacks); err != nil {
+			return nil, err
+		}
+	}
+
+	return facilitatorFeedbacks, nil
 }
 
 func (u *feedbackUsecase) findOrCreateFacilitator(name string) (*facilitator.Facilitator, error) {
@@ -166,7 +209,11 @@ func (u *feedbackUsecase) findOrCreateFacilitator(name string) (*facilitator.Fac
 	}
 
 	if f == nil {
-
+		f = &facilitator.Facilitator{Name: name}
+		err := u.FacilitatorRepository.StoreFacilitator(f)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return f, nil
