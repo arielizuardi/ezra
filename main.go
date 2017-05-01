@@ -39,7 +39,7 @@ func init() {
 	config = cfg.NewViperConfig()
 	logrus.SetFormatter(&logrus.JSONFormatter{})
 	if config.GetBool(`debug`) {
-		logrus.Warn(`Falkland is running in debug mode`)
+		logrus.Warn(`Ezra is running in debug mode`)
 		logrus.SetLevel(logrus.DebugLevel)
 	} else {
 		logrus.SetLevel(logrus.InfoLevel)
